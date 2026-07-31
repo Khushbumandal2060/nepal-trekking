@@ -47,7 +47,7 @@ export default function Footer() {
                 <Mountain className="w-4 h-4 text-slate-950" />
               </div>
               <span className="text-sm font-bold text-white tracking-tight">
-                TREK THE HIMALAYAS
+                NEPAL TREKKING
               </span>
             </Link>
             <p className="text-sm leading-relaxed max-w-xs">
@@ -109,7 +109,7 @@ export default function Footer() {
 
         <div className="mt-16 pt-8 border-t border-slate-900 text-center">
           <p className="text-xs text-slate-600">
-            © 2024 Trek The Himalayas. All technical standards reserved.
+            © 2024 s. All technical standards reserved.
           </p>
         </div>
       </div>
