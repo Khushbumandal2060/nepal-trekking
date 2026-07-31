@@ -33,7 +33,7 @@ export default function Navbar() {
                 <Mountain className="w-4 h-4 text-white" />
               </div>
               <span className="text-sm font-bold tracking-tight text-slate-900">
-                Trek The Himalayas
+                Nepal Trekking
               </span>
             </Link>
 
