@@ -1,0 +1,5 @@
+# Static assets folder
+
+Place static files here so they are served from the site root.
+Example: public/images/everest.jpg  ->  /images/everest.jpg
+Example: public/logo.png            ->  /logo.png
