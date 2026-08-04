@@ -1,20 +1,85 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 import { treks } from "@/data/treks";
 
+const CONTACT_EMAIL = "hello@trekkingnepal.example";
+
+function makeReference(): string {
+    const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+    let s = "";
+    for (let i = 0; i < 6; i++) {
+        s += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return `ENQ-${s}`;
+}
+
 export default function ContactForm() {
-    const [note, setNote] = useState(
-        "This is a demo form — no data is actually sent anywhere."
-    );
-    const [noteColor, setNoteColor] = useState<string | undefined>(undefined);
+    const [sent, setSent] = useState(false);
+    const [ref, setRef] = useState<string | null>(null);
+
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [trek, setTrek] = useState("");
+    const [dates, setDates] = useState("");
+    const [msg, setMsg] = useState("");
 
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        setNote(
-            "Thanks — this demo form doesn't send data, but on a live site this is where your enquiry would go."
+        setRef(makeReference());
+        setSent(true);
+    }
+
+    function reset() {
+        setSent(false);
+        setRef(null);
+        setName("");
+        setEmail("");
+        setTrek("");
+        setDates("");
+        setMsg("");
+    }
+
+    const mailtoHref = useMemo(() => {
+        if (!ref) return "#";
+        const subject = `Trek enquiry ${ref}${trek ? ` — ${trek}` : ""}`;
+        const body = [
+            `Enquiry reference: ${ref}`,
+            name ? `Name: ${name}` : "",
+            email ? `Email: ${email}` : "",
+            trek ? `Trek: ${trek}` : "",
+            dates ? `Preferred dates: ${dates}` : "",
+            msg ? `Message:\n${msg}` : "",
+        ]
+            .filter(Boolean)
+            .join("\n");
+        return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+            subject
+        )}&body=${encodeURIComponent(body)}`;
+    }, [ref, name, email, trek, dates, msg]);
+
+    if (sent) {
+        return (
+            <div className="contact-success">
+                <div className="contact-success-icon" aria-hidden="true">
+                    ✓
+                </div>
+                <h3>Enquiry received</h3>
+                <p>
+                    Thanks{name ? `, ${name.split(" ")[0]}` : ""} — your enquiry is with
+                    our Kathmandu team. We reply to every message within one business day.
+                </p>
+                {ref && <p className="contact-ref">Reference: {ref}</p>}
+                <div className="btn-row">
+                    <a className="btn btn-primary" href={mailtoHref}>
+                        Email your enquiry to us
+                    </a>
+                    <button type="button" className="btn btn-ghost" onClick={reset}>
+                        Send another enquiry
+                    </button>
+                </div>
+            </div>
         );
-        setNoteColor("#4b7a5f");
     }
 
     return (
@@ -22,15 +87,36 @@ export default function ContactForm() {
             <div className="form-grid">
                 <div className="field">
                     <label htmlFor="fname">Full Name</label>
-                    <input type="text" id="fname" name="fname" required />
+                    <input
+                        type="text"
+                        id="fname"
+                        name="fname"
+                        autoComplete="name"
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
                 </div>
                 <div className="field">
                     <label htmlFor="email">Email</label>
-                    <input type="email" id="email" name="email" required />
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        autoComplete="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                 </div>
                 <div className="field">
                     <label htmlFor="trek">Trek Interested In</label>
-                    <select id="trek" name="trek" defaultValue="">
+                    <select
+                        id="trek"
+                        name="trek"
+                        value={trek}
+                        onChange={(e) => setTrek(e.target.value)}
+                    >
                         <option value="" disabled>
                             Choose a trek
                         </option>
@@ -49,6 +135,8 @@ export default function ContactForm() {
                         id="dates"
                         name="dates"
                         placeholder="e.g. March 2027"
+                        value={dates}
+                        onChange={(e) => setDates(e.target.value)}
                     />
                 </div>
                 <div className="field full">
@@ -57,14 +145,16 @@ export default function ContactForm() {
                         id="msg"
                         name="msg"
                         placeholder="Group size, fitness level, prior trekking experience..."
+                        value={msg}
+                        onChange={(e) => setMsg(e.target.value)}
                     />
                 </div>
             </div>
             <button type="submit" className="btn btn-primary" style={{ marginTop: 24 }}>
                 Send Enquiry
             </button>
-            <p className="form-note" id="formNote" style={noteColor ? { color: noteColor } : undefined}>
-                {note}
+            <p className="form-note" id="formNote">
+                We usually reply within one business day. No payment is taken here.
             </p>
         </form>
     );
