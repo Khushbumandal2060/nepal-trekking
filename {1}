@@ -1,0 +1,2 @@
+http://localhost:3000/treks = err:False trekCard:True
+http://localhost:3000/ = err:False trekCard:False

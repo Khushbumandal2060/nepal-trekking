@@ -1,0 +1,957 @@
+/* ============================================================
+   ABOUT US — token-driven module styles
+   Relies on the design tokens plus the .wrap / .reveal /
+   .sec-head / .sec-eyebrow / .eyebrow / .lede / .btn-ghost
+   primitives already defined in src/app/globals.css.
+   No token is redefined here — only used.
+
+   Scroll-reveal strategy:
+   Grid/cloud children are visible by default (no-JS safe — the
+   <noscript> fallback in layout.tsx forces .reveal itself
+   visible, and these children never hide unless the animation
+   runs). When the parent .wrap.reveal gains .is-visible
+   (added by RevealProvider), each child plays the `about-rise`
+   animation with a short delay for the stagger. Because
+   animation-fill-mode is `backwards`, the hidden "from" state
+   only applies during the delay; once the animation finishes,
+   transforms revert to the normal cascade so :hover effects
+   work cleanly with no specificity conflicts.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1 · ABOUT HERO
+   ------------------------------------------------------------ */
+.aboutHero {
+    position: relative;
+    min-height: 85vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    padding: 0;
+    background: var(--night);
+    color: var(--mist);
+}
+
+.aboutHeroMedia {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.aboutHeroImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Bottom-heavy scrim so the copy stays readable over the image. */
+.aboutHeroScrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(to top,
+            rgba(13, 23, 33, 0.94) 0%,
+            rgba(13, 23, 33, 0.6) 42%,
+            rgba(13, 23, 33, 0.24) 74%,
+            rgba(13, 23, 33, 0.06) 100%);
+}
+
+.aboutHeroContent {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding-top: clamp(140px, 24vh, 240px);
+    padding-bottom: clamp(64px, 11vh, 120px);
+}
+
+/* The global .eyebrow already supplies the mono / uppercase /
+   --ice text plus the --flare rule line; here we only drive
+   the staggered fade-in-up. */
+.aboutHeroContent :global(.eyebrow) {
+    opacity: 0;
+    animation: about-fade-up 0.8s var(--ease) 0s both;
+}
+
+.aboutHeroContent h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(40px, 6.6vw, 72px);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    color: var(--mist);
+    max-width: 840px;
+    opacity: 0;
+    animation: about-fade-up 0.8s var(--ease) 0.15s both;
+}
+
+.aboutHeroContent :global(.lede) {
+    margin-top: 24px;
+    max-width: 580px;
+    font-size: 17.5px;
+    line-height: 1.65;
+    color: var(--stone);
+    opacity: 0;
+    animation: about-fade-up 0.8s var(--ease) 0.3s both;
+}
+
+@keyframes about-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ------------------------------------------------------------
+   2 · TRUST BAR
+   ------------------------------------------------------------ */
+.trustBar {
+    background: var(--night);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 18px 0;
+}
+
+.trustBarInner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.trustBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 24px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.6px;
+    line-height: 1.4;
+    color: var(--stone);
+}
+
+/* Checkmark in flare, per spec. */
+.trustBadge::before {
+    content: "\2713";
+    color: var(--flare);
+    font-weight: 600;
+    line-height: 1;
+}
+
+/* Thin separators between items. */
+.trustBadge+.trustBadge {
+    border-left: 1px solid var(--line);
+}
+
+/* ------------------------------------------------------------
+   3 · VALUES
+   ------------------------------------------------------------ */
+.valuesSection {
+    background: var(--mist);
+}
+
+.valuesGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.valueCard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #fff;
+    border: 1px solid var(--hline);
+    border-radius: var(--r-lg);
+    padding: 2rem;
+    overflow: hidden;
+    transition:
+        transform 0.35s var(--ease),
+        box-shadow 0.35s var(--ease),
+        border-color 0.35s var(--ease);
+}
+
+/* 3px flare gradient that scales in from the left on hover. */
+.valueCard::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--flare), var(--flare-dim));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s var(--ease);
+}
+
+.valueCard:hover {
+    transform: translateY(-6px);
+    border-color: rgba(217, 95, 36, 0.35);
+    box-shadow: var(--shadow-lg);
+}
+
+.valueCard:hover::before {
+    transform: scaleX(1);
+}
+
+.valueCard .icon {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.valueCard h3 {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.3;
+    color: var(--ink);
+}
+
+.valueCard p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--sub);
+}
+
+/* ------------------------------------------------------------
+   4 · TIMELINE
+   ------------------------------------------------------------ */
+.timelineSection {
+    background: #fff;
+}
+
+.timelineSection :global(.sec-head) {
+    text-align: center;
+    margin: 0 auto 4rem;
+    max-width: 560px;
+}
+
+.timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Central gradient line: hline → flare → hline. */
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom,
+            var(--hline),
+            var(--flare) 50%,
+            var(--hline));
+}
+
+.timelineItem {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 3.5rem;
+}
+
+.timelineYear {
+    flex: 1;
+    min-width: 110px;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    color: var(--flare);
+    text-align: center;
+}
+
+.timelineDot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 4px solid var(--flare);
+    box-shadow:
+        0 0 0 6px rgba(217, 95, 36, 0.16),
+        0 4px 14px rgba(217, 95, 36, 0.35);
+    z-index: 2;
+    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+.timelineItem:hover .timelineDot {
+    transform: translate(-50%, -50%) scale(1.25);
+    box-shadow:
+        0 0 0 10px rgba(217, 95, 36, 0.2),
+        0 6px 18px rgba(217, 95, 36, 0.45);
+}
+
+.timelineContent {
+    flex: 1;
+}
+
+.timelineItem:nth-child(odd) .timelineContent {
+    text-align: right;
+    padding-right: 3.5rem;
+}
+
+.timelineItem:nth-child(odd) .timelineYear {
+    order: 2;
+    text-align: left;
+    padding-left: 3.5rem;
+}
+
+.timelineItem:nth-child(even) .timelineContent {
+    text-align: left;
+    padding-left: 3.5rem;
+}
+
+.timelineItem:nth-child(even) .timelineYear {
+    order: -1;
+    text-align: right;
+    padding-right: 3.5rem;
+}
+
+.timelineContent h3 {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 6px;
+}
+
+.timelineContent p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--sub);
+}
+
+/* ------------------------------------------------------------
+   5 · REGIONS
+   ------------------------------------------------------------ */
+.regionsSection {
+    background: linear-gradient(160deg, var(--night) 0%, var(--slate) 100%);
+    color: var(--mist);
+    overflow: hidden;
+}
+
+.regionsSection :global(.sec-head) {
+    text-align: center;
+    margin: 0 auto 3rem;
+    max-width: 640px;
+}
+
+.regionsSection :global(.sec-head h2) {
+    color: var(--mist);
+}
+
+.regionsSection :global(.sec-head p) {
+    color: var(--stone);
+}
+
+.regionsCloud {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+}
+
+.regionPill {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 22px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--r-pill);
+    background: rgba(255, 255, 255, 0.04);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: var(--stone);
+    font-size: 14px;
+    letter-spacing: 0.2px;
+    cursor: default;
+    transition:
+        transform 0.3s var(--ease),
+        border-color 0.3s var(--ease),
+        color 0.3s var(--ease),
+        background 0.3s var(--ease);
+}
+
+.regionPill:hover {
+    transform: translateY(-3px);
+    border-color: rgba(217, 95, 36, 0.4);
+    color: var(--flare-soft);
+    background: rgba(217, 95, 36, 0.08);
+}
+
+/* ------------------------------------------------------------
+   6 · GUIDE QUOTE
+   ------------------------------------------------------------ */
+.guideQuoteSection {
+    background: var(--panel);
+}
+
+.guideQuote {
+    position: relative;
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 3.5rem 2rem 2rem;
+}
+
+/* Decorative quotation mark, low opacity. */
+.guideQuote::before {
+    content: "\201C";
+    position: absolute;
+    top: -0.9rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-serif);
+    font-size: 7rem;
+    line-height: 1;
+    color: var(--flare);
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+.guideQuote p {
+    position: relative;
+    font-family: var(--font-serif);
+    font-size: clamp(20px, 2.6vw, 24px);
+    line-height: 1.6;
+    font-style: italic;
+    color: var(--ink);
+}
+
+.guideQuote footer {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.guideQuote footer strong {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--ink);
+}
+
+.guideQuote footer span {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--sub);
+}
+
+/* ------------------------------------------------------------
+   7 · TEAM
+   ------------------------------------------------------------ */
+.teamSection {
+    background: #fff;
+}
+
+.teamSection :global(.sec-head) {
+    text-align: center;
+    margin: 0 auto 3rem;
+    max-width: 640px;
+}
+
+.teamGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.teamCard {
+    background: #fff;
+    border: 1px solid var(--hline);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    transition:
+        transform 0.35s var(--ease),
+        box-shadow 0.35s var(--ease),
+        border-color 0.35s var(--ease);
+}
+
+.teamCard:hover {
+    transform: translateY(-6px);
+    border-color: rgba(217, 95, 36, 0.35);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Gradient placeholder with the ridge SVG anchored at the bottom. */
+.teamPhoto {
+    position: relative;
+    height: 220px;
+    background: linear-gradient(160deg, var(--slate-2) 0%, var(--night) 100%);
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+.teamPhoto :global(svg) {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.teamInfo {
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.teamInfo h4 {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.3;
+    color: var(--ink);
+}
+
+.teamInfo span {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--flare);
+}
+
+/* ------------------------------------------------------------
+   8 · STATS
+   ------------------------------------------------------------ */
+.statsSection {
+    position: relative;
+    background: var(--night);
+    color: var(--mist);
+    overflow: hidden;
+}
+
+/* Subtle dot grid at very low opacity. */
+.statsSection::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='44' height='44' viewBox='0 0 44 44' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1.5' fill='%23ffffff' fill-opacity='0.10'/%3E%3C/svg%3E");
+    background-size: 44px 44px;
+    pointer-events: none;
+}
+
+.statsSection :global(.sec-head) {
+    text-align: center;
+    margin: 0 auto 3rem;
+}
+
+.statsSection :global(.sec-head h2) {
+    color: var(--mist);
+}
+
+.milestones {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    text-align: center;
+}
+
+.milestone {
+    padding: 12px 8px;
+    transition: transform 0.35s var(--ease);
+}
+
+.milestone:hover {
+    transform: translateY(-4px);
+}
+
+.milestone .num {
+    font-family: var(--font-mono);
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--flare), var(--flare-dim));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+.milestone .lbl {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--stone);
+}
+
+/* ------------------------------------------------------------
+   9 · CTA BAND
+   ------------------------------------------------------------ */
+.ctaBand {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding: var(--sec) 0;
+    background: linear-gradient(135deg, var(--flare), var(--flare-dim));
+    color: #fff;
+}
+
+/* Subtle decorative pattern overlay. */
+.ctaBand::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='90' height='90' viewBox='0 0 90 90' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='45' cy='45' r='2' fill='%23ffffff' fill-opacity='0.12'/%3E%3C/svg%3E");
+    background-size: 90px 90px;
+    pointer-events: none;
+}
+
+.ctaBand> :global(.wrap) {
+    position: relative;
+    z-index: 1;
+}
+
+.ctaBand h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 14px;
+}
+
+.ctaBand p {
+    max-width: 520px;
+    margin: 0 auto 2rem;
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.ctaBand :global(.btn-ghost) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 34px;
+    background: #fff;
+    color: var(--flare-dim);
+    border: 1px solid #fff;
+    border-radius: var(--r-pill);
+    font-weight: 600;
+    box-shadow: 0 10px 30px -8px rgba(13, 23, 33, 0.35);
+    transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+
+.ctaBand :global(.btn-ghost:hover) {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 38px -10px rgba(13, 23, 33, 0.45);
+}
+
+/* ------------------------------------------------------------
+   SERIF SECTION HEADINGS
+   The global .sec-head.h2 supplies size/weight; the About page
+   uses the serif display face for its section headings.
+   ------------------------------------------------------------ */
+.valuesSection :global(.sec-head h2),
+.timelineSection :global(.sec-head h2),
+.regionsSection :global(.sec-head h2),
+.teamSection :global(.sec-head h2),
+.statsSection :global(.sec-head h2) {
+    font-family: var(--font-serif);
+}
+
+/* ============================================================
+   SCROLL-REVEAL STAGGER
+   Children are visible by default; once the parent .reveal
+   wrapper gains .is-visible (added by RevealProvider) each
+   child plays `about-rise` with a short delay. Fill mode
+   `backwards` only hides them during the delay, then reverts
+   to the normal cascade so :hover works without conflicts.
+   ============================================================ */
+
+@keyframes about-rise {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ---- Trust bar (6 badges) ---- */
+:global(.reveal.is-visible) .trustBadge:nth-child(1) {
+    animation: about-rise 0.55s var(--ease) 0.04s backwards;
+}
+
+:global(.reveal.is-visible) .trustBadge:nth-child(2) {
+    animation: about-rise 0.55s var(--ease) 0.08s backwards;
+}
+
+:global(.reveal.is-visible) .trustBadge:nth-child(3) {
+    animation: about-rise 0.55s var(--ease) 0.12s backwards;
+}
+
+:global(.reveal.is-visible) .trustBadge:nth-child(4) {
+    animation: about-rise 0.55s var(--ease) 0.16s backwards;
+}
+
+:global(.reveal.is-visible) .trustBadge:nth-child(5) {
+    animation: about-rise 0.55s var(--ease) 0.2s backwards;
+}
+
+:global(.reveal.is-visible) .trustBadge:nth-child(6) {
+    animation: about-rise 0.55s var(--ease) 0.24s backwards;
+}
+
+/* ---- Values (4 cards) ---- */
+:global(.reveal.is-visible) .valueCard:nth-child(1) {
+    animation: about-rise 0.6s var(--ease) 0.05s backwards;
+}
+
+:global(.reveal.is-visible) .valueCard:nth-child(2) {
+    animation: about-rise 0.6s var(--ease) 0.12s backwards;
+}
+
+:global(.reveal.is-visible) .valueCard:nth-child(3) {
+    animation: about-rise 0.6s var(--ease) 0.19s backwards;
+}
+
+:global(.reveal.is-visible) .valueCard:nth-child(4) {
+    animation: about-rise 0.6s var(--ease) 0.26s backwards;
+}
+
+/* ---- Timeline (4 items) ---- */
+:global(.reveal.is-visible) .timelineItem:nth-child(1) {
+    animation: about-rise 0.5s var(--ease) 0.05s backwards;
+}
+
+:global(.reveal.is-visible) .timelineItem:nth-child(2) {
+    animation: about-rise 0.5s var(--ease) 0.15s backwards;
+}
+
+:global(.reveal.is-visible) .timelineItem:nth-child(3) {
+    animation: about-rise 0.5s var(--ease) 0.25s backwards;
+}
+
+:global(.reveal.is-visible) .timelineItem:nth-child(4) {
+    animation: about-rise 0.5s var(--ease) 0.35s backwards;
+}
+
+/* ---- Regions cloud (11 pills) ---- */
+:global(.reveal.is-visible) .regionPill:nth-child(1) {
+    animation: about-rise 0.55s var(--ease) 0.04s backwards;
+}
+
+:global(.reveal.is-visible) .regionPill:nth-child(2) {
+    animation: about-rise 0.55s var(--ease) 0.08s backwards;
+}
+
+:global(.reveal.is-visible) .regionPill:nth-child(3) {
+    animation: about-rise 0.55s var(--ease) 0.12s backwards;
+}
+
+:global(.reveal.is-visible) .regionPill:nth-child(4) {
+    animation: about-rise 0.55s var(--ease) 0.16s backwards;
+}
+
+:global(.reveal.is-visible) .regionPill:nth-child(5) {
+    animation: about-rise 0.55s var(--ease) 0.2s backwards;
+}
+
+:global(.reveal.is-visible) .regionPill:nth-child(6) {
+    animation: about-rise 0.55s var(--ease) 0.24s backwards;
+}
+
+:global(.reveal.is-visible) .regionPill:nth-child(7) {
+    animation: about-rise 0.55s var(--ease) 0.28s backwards;
+}
+
+:global(.reveal.is-visible) .regionPill:nth-child(8) {
+    animation: about-rise 0.55s var(--ease) 0.32s backwards;
+}
+
+:global(.reveal.is-visible) .regionPill:nth-child(9) {
+    animation: about-rise 0.55s var(--ease) 0.36s backwards;
+}
+
+:global(.reveal.is-visible) .regionPill:nth-child(10) {
+    animation: about-rise 0.55s var(--ease) 0.4s backwards;
+}
+
+:global(.reveal.is-visible) .regionPill:nth-child(11) {
+    animation: about-rise 0.55s var(--ease) 0.44s backwards;
+}
+
+/* ---- Team (4 cards) ---- */
+:global(.reveal.is-visible) .teamCard:nth-child(1) {
+    animation: about-rise 0.6s var(--ease) 0.05s backwards;
+}
+
+:global(.reveal.is-visible) .teamCard:nth-child(2) {
+    animation: about-rise 0.6s var(--ease) 0.12s backwards;
+}
+
+:global(.reveal.is-visible) .teamCard:nth-child(3) {
+    animation: about-rise 0.6s var(--ease) 0.19s backwards;
+}
+
+:global(.reveal.is-visible) .teamCard:nth-child(4) {
+    animation: about-rise 0.6s var(--ease) 0.26s backwards;
+}
+
+/* ---- Stats (4 milestones) ---- */
+:global(.reveal.is-visible) .milestone:nth-child(1) {
+    animation: about-rise 0.6s var(--ease) 0.05s backwards;
+}
+
+:global(.reveal.is-visible) .milestone:nth-child(2) {
+    animation: about-rise 0.6s var(--ease) 0.12s backwards;
+}
+
+:global(.reveal.is-visible) .milestone:nth-child(3) {
+    animation: about-rise 0.6s var(--ease) 0.19s backwards;
+}
+
+:global(.reveal.is-visible) .milestone:nth-child(4) {
+    animation: about-rise 0.6s var(--ease) 0.26s backwards;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+    .aboutHero {
+        min-height: 72vh;
+    }
+
+    .valuesGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .teamGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .milestones {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .aboutHero {
+        min-height: 70vh;
+    }
+
+    .aboutHeroContent {
+        padding-bottom: clamp(48px, 12vw, 80px);
+    }
+
+    .valuesGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .teamGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .milestones {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Trust badges tighten up on small screens. */
+    .trustBadge {
+        padding: 6px 16px;
+        font-size: 12px;
+    }
+
+    .ctaBand h2 {
+        font-size: 26px;
+    }
+
+    /* Single-column timeline, line moved to the left. */
+    .timeline {
+        padding-left: 44px;
+    }
+
+    .timeline::before {
+        left: 10px;
+        transform: none;
+    }
+
+    .timelineItem {
+        flex-direction: column;
+        align-items: stretch;
+        margin-bottom: 2.5rem;
+    }
+
+    .timelineDot {
+        left: 10px;
+        top: 8px;
+        transform: translateX(-50%);
+    }
+
+    .timelineItem:hover .timelineDot {
+        transform: translateX(-50%) scale(1.25);
+    }
+
+    .timelineItem:nth-child(odd) .timelineContent,
+    .timelineItem:nth-child(even) .timelineContent {
+        order: 0;
+        padding: 0;
+        text-align: left;
+    }
+
+    .timelineItem:nth-child(odd) .timelineYear,
+    .timelineItem:nth-child(even) .timelineYear {
+        order: -1;
+        min-width: 0;
+        padding: 0;
+        margin-bottom: 6px;
+        text-align: left;
+    }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+
+    .aboutHeroContent :global(.eyebrow),
+    .aboutHeroContent h1,
+    .aboutHeroContent :global(.lede) {
+        opacity: 1;
+        transform: none;
+        animation: none;
+    }
+
+    :global(.reveal.is-visible) .trustBadge,
+    :global(.reveal.is-visible) .valueCard,
+    :global(.reveal.is-visible) .timelineItem,
+    :global(.reveal.is-visible) .regionPill,
+    :global(.reveal.is-visible) .teamCard,
+    :global(.reveal.is-visible) .milestone {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .valueCard:hover,
+    .teamCard:hover,
+    .milestone:hover,
+    .regionPill:hover,
+    .valueCard:hover::before,
+    .timelineItem:hover .timelineDot,
+    .ctaBand :global(.btn-ghost:hover) {
+        transform: none;
+        box-shadow: none;
+        transition: none;
+    }
+}

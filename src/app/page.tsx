@@ -1,321 +1,423 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  Shield,
-  Building2,
-  Leaf,
-  Users,
-  MapPin,
-  Calendar,
-  ChevronDown,
-  Star,
-  Mountain,
-} from "lucide-react";
-import { treks } from "@/lib/data";
-import ScrollReveal from "@/components/ScrollReveal";
-import StaggerContainer, { StaggerItem } from "@/components/StaggerContainer";
+import HeroContours from "@/components/HeroContours";
+import TrekCard from "@/components/TrekCard";
+import { treks } from "@/data/treks";
+import { blogPosts } from "@/data/blog";
+import type { Testimonial, Trek } from "@/lib/types";
 
-const advantages = [
-  {
-    icon: Shield,
-    title: "Uncompromising Safety",
-    desc: "Certified guides, oxygen support, and satellite communications on every high-altitude trek.",
-  },
-  {
-    icon: Building2,
-    title: "Elite Stays",
-    desc: "We handpick the best available teahouses and provide premium luxury camping gear.",
-  },
-  {
-    icon: Leaf,
-    title: "Eco Impact",
-    desc: "A strict zero-waste trail policy and carbon-neutral expeditions that support local sherpa communities.",
-  },
-  {
-    icon: Users,
-    title: "Small Batches",
-    desc: "Experience personal, elite attention with a maximum of 8 trekkers per group.",
-  },
+const POPULAR_SLUGS = [
+    "everest-base-camp",
+    "annapurna-base-camp",
+    "manaslu-circuit",
+    "langtang-valley",
+    "upper-mustang",
+    "poon-hill",
+];
+
+const PREMIUM_SLUGS = [
+    "kanchenjunga-base-camp",
+    "upper-dolpo",
+    "makalu-base-camp",
+    "dhaulagiri-circuit",
+    "everest-three-passes",
+    "nar-phu-valley",
+];
+
+const DESTINATIONS: {
+    value: string;
+    name: string;
+    tag: string;
+    desc: string;
+}[] = [
+        {
+            value: "khumbu",
+            name: "Khumbu",
+            tag: "Everest Region",
+            desc: "Sherpa villages, glacier moraines and the world's highest peak — the classic high-Himalaya trekking zone.",
+        },
+        {
+            value: "annapurna",
+            name: "Annapurna",
+            tag: "Central Nepal",
+            desc: "From jungle-floored Modi Khola valleys to the high Thorong La pass, with Pokhara as the natural base.",
+        },
+        {
+            value: "langtang",
+            name: "Langtang",
+            tag: "North of Kathmandu",
+            desc: "Rhododendron forests and Tamang villages a short drive from the capital — our easiest true mountain escape.",
+        },
+        {
+            value: "manaslu",
+            name: "Manaslu",
+            tag: "Restricted Area",
+            desc: "A permit-controlled circuit around the eighth-highest peak, past gompas, gorges and far fewer trekkers.",
+        },
+        {
+            value: "mustang",
+            name: "Mustang",
+            tag: "Tibetan Plateau",
+            desc: "Wind-carved canyons and walled Tibetan towns on the rain-shadowed plateau north of the Annapurnas.",
+        },
+        {
+            value: "kanchenjunga",
+            name: "Kanchenjunga",
+            tag: "Far Eastern Nepal",
+            desc: "Remote base camps at the foot of the world's third-highest peak, far from the crowds of the central Himalaya.",
+        },
+    ];
+
+const TESTIMONIALS: Testimonial[] = [
+    {
+        name: "Sonam T.",
+        trek: "Everest Base Camp Trek",
+        quote:
+            "Our guide, Pemba, knew every teahouse owner by name from Phakding to Gorak Shep. That familiarity made a hard trek feel taken care of the entire way.",
+    },
+    {
+        name: "Meera J.",
+        trek: "Annapurna Circuit Trek",
+        quote:
+            "The acclimatization days weren't just on paper — our guide genuinely refused to rush us over Thorong La until everyone felt ready. That mattered.",
+    },
+    {
+        name: "Ben O.",
+        trek: "Manaslu Circuit Trek",
+        quote:
+            "Barely saw another trekking group the entire route. If you want the Himalaya without the queues, this is it.",
+    },
+    {
+        name: "Aashna P.",
+        trek: "Upper Mustang Trek",
+        quote:
+            "Lo Manthang in person is nothing like the photos. Our guide's family connections in the region got us into two monasteries that aren't usually open to visitors.",
+    },
+];
+
+const WHY = [
+    { n: "01", t: "Eight of the world's 8,000m peaks", d: "Everest, Kanchenjunga, Makalu, Lhotse, Cho Oyu, Dhaulagiri, Manaslu and Annapurna — no other country puts this many giants within reach of a single trek." },
+    { n: "02", t: "Licensed local guides, not contractors", d: "Every trek leader is licensed by Nepal's Ministry of Culture, Tourism & Civil Aviation and lives in the valley they guide." },
+    { n: "03", t: "Permits handled in-house", d: "TIMS, park and conservation fees, and restricted-area permits for Manaslu, Upper Mustang and Kanchenjunga are arranged before you land." },
+    { n: "04", t: "A teahouse on almost every trail", d: "From Lukla to Lo Manthang, the lodge network means real beds, hot meals and warm hosts — no camping needed on classic routes." },
+    { n: "05", t: "Acclimatization built into every high route", d: "Itineraries above 3,500m carry dedicated rest days as the default plan, not an upsell, so you reach the summit feeling strong." },
+    { n: "06", t: "Trekking that gives back to the hills", d: "We work with the same family-run lodges and porter crews season after season and pay above the regional minimum." },
+];
+
+const STEPS = [
+    { n: "Step 01", t: "Send an enquiry", d: "Tell us your dates, route and group size through the booking form or a quick email — we read everything ourselves." },
+    { n: "Step 02", t: "Get a tailored plan", d: "A trek expert replies within 24 hours with a day-by-day itinerary, clear pricing and a full permit checklist." },
+    { n: "Step 03", t: "Reserve your spot", d: "Hold your departure with a 20% deposit. The balance is due 30 days before you fly — free date changes up to then." },
+    { n: "Step 04", t: "We handle the rest", d: "Permits, lodges, guides, porters and meals are arranged before you land. All you do is walk." },
 ];
 
 export default function HomePage() {
-  return (
-    <div className="pb-24 md:pb-0">
-      {/* Hero */}
-      <section className="relative h-[90vh] min-h-[650px] flex items-center overflow-hidden">
-        <motion.div
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          className="absolute inset-0"
-        >
-          <Image
-            src="/images/home.jpg"
-            alt="Himalayan peaks at sunrise"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/40" />
-        </motion.div>
+    const popular = POPULAR_SLUGS.map((slug) =>
+        treks.find((t) => t.slug === slug)
+    ).filter((t): t is Trek => Boolean(t));
+    const premium = PREMIUM_SLUGS.map((slug) =>
+        treks.find((t) => t.slug === slug)
+    ).filter((t): t is Trek => Boolean(t));
+    const regionCount = new Set(treks.map((t) => t.region)).size;
 
-        <div className="relative z-10 w-full px-4 max-w-7xl mx-auto flex flex-col justify-center h-full pt-16">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-2xl"
-          >
-            <h1 className="text-5xl sm:text-6xl md:text-8xl font-extrabold text-white mb-6 leading-[1.05] tracking-tight">
-              Scale Your
-              <br />
-              <span className="text-cyan-400">Nepal Dreams</span>
-            </h1>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-10 max-w-4xl bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-white/20 shadow-2xl flex flex-col md:flex-row items-stretch gap-2"
-          >
-            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/10 bg-white/15 rounded-xl px-4 py-3">
-              <div className="flex items-center gap-3 pb-3 sm:pb-0">
-                <MapPin className="w-5 h-5 text-cyan-400 shrink-0" />
-                <div className="text-left">
-                  <p className="text-[10px] font-bold tracking-wider text-white/50 uppercase">Select Trek</p>
-                  <p className="text-sm font-semibold text-white">Where to?</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 pt-3 sm:pt-0 sm:pl-4">
-                <Calendar className="w-5 h-5 text-cyan-400 shrink-0" />
-                <div className="text-left">
-                  <p className="text-[10px] font-bold tracking-wider text-white/50 uppercase">Season</p>
-                  <p className="text-sm font-semibold text-white">Autumn 2024</p>
-                </div>
-              </div>
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="px-8 py-4 bg-[#0f294a] hover:bg-[#163c6b] text-white font-bold text-sm rounded-xl transition-colors flex items-center justify-center gap-2 group"
-            >
-              Explore Expeditions
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </motion.button>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 1 }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5"
-          >
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="flex flex-col items-center gap-1.5"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
-              <ChevronDown className="w-4 h-4 text-white" />
-              <span className="w-1.5 h-1.5 rounded-full bg-white/40"></span>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Signature Treks */}
-      <section className="py-24 px-4 max-w-7xl mx-auto" id="treks">
-        <ScrollReveal>
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <p className="text-xs font-bold tracking-[0.2em] text-cyan-600 uppercase mb-2">
-                Featured Expeditions
-              </p>
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
-                Signature Treks
-              </h2>
-            </div>
-            <Link
-              href="#"
-              className="hidden sm:inline-flex items-center gap-2 text-sm font-bold text-slate-800 hover:text-cyan-600 transition-colors group"
-            >
-              View All Treks
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
-        </ScrollReveal>
-
-        <StaggerContainer className="grid md:grid-cols-2 gap-10" staggerDelay={0.15}>
-          {treks.map((trek) => (
-            <StaggerItem key={trek.slug}>
-              <Link
-                href={`/trek/${trek.slug}`}
-                className="group block bg-white rounded-[2rem] border border-slate-100 overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500"
-              >
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <Image
-                    src={trek.image}
-                    alt={trek.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </div>
-
-                <div className="p-8">
-                  <span className="text-xs font-bold tracking-widest text-amber-600 uppercase">
-                    {trek.category}
-                  </span>
-                  <h3 className="text-2xl font-extrabold text-slate-900 mt-2 mb-6 group-hover:text-cyan-600 transition-colors duration-300">
-                    {trek.title}
-                  </h3>
-
-                  <div className="grid grid-cols-2 gap-y-4 pt-6 border-t border-slate-100 text-sm">
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Elevation</p>
-                      <p className="text-base font-bold text-slate-800 mt-0.5">Max: {trek.altitude}</p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Difficulty</p>
-                      <p className="text-base font-bold text-slate-800 mt-0.5">{trek.difficulty}</p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Duration</p>
-                      <p className="text-base font-bold text-slate-800 mt-0.5">{trek.days}</p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Price</p>
-                      <p className="text-lg font-black text-slate-900 mt-0.5">${trek.price.toLocaleString()}</p>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </StaggerItem>
-          ))}
-        </StaggerContainer>
-      </section>
-
-      {/* TTH Advantage */}
-      <section className="py-24 px-4 bg-slate-50/60 border-y border-slate-100">
-        <div className="max-w-7xl mx-auto">
-          <ScrollReveal>
-            <div className="text-center mb-16">
-              <p className="text-xs font-bold tracking-[0.2em] text-cyan-600 uppercase mb-3">
-                Why Expedition With NT
-              </p>
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
-                The NT Advantage
-              </h2>
-            </div>
-          </ScrollReveal>
-
-          <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8" staggerDelay={0.1}>
-            {advantages.map((item) => (
-              <StaggerItem key={item.title}>
-                <motion.div
-                  whileHover={{ y: -6 }}
-                  transition={{ duration: 0.3 }}
-                  className="group bg-white rounded-3xl p-8 border border-slate-100 hover:border-cyan-100 hover:shadow-xl hover:shadow-cyan-900/5 transition-all duration-300 cursor-default"
-                >
-                  <div className="w-12 h-12 bg-cyan-50/50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-cyan-600 group-hover:scale-110 transition-all duration-300">
-                    <item.icon className="w-5 h-5 text-cyan-600 group-hover:text-white transition-colors duration-300" />
-                  </div>
-                  <h4 className="text-lg font-bold text-slate-900 mb-3">
-                    {item.title}
-                  </h4>
-                  <p className="text-sm text-slate-500 leading-relaxed">
-                    {item.desc}
-                  </p>
-                </motion.div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
-
-      {/* Testimonial */}
-      <section className="py-24 px-4 bg-[#0a1e3a] text-white overflow-hidden">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-16 items-center">
-          <ScrollReveal direction="left" className="lg:col-span-7 space-y-8">
-            <p className="text-xs font-bold tracking-[0.2em] text-cyan-400 uppercase">
-              Client Testimonials
-            </p>
-            <h3 className="text-3xl md:text-5xl font-semibold italic font-serif leading-tight">
-              &ldquo;The professionalism of NT is unparalleled. I felt safe, cared for, and truly connected to the culture.&rdquo;
-            </h3>
-            <div className="flex items-center gap-4 pt-4">
-              <div className="relative w-12 h-12 rounded-full overflow-hidden bg-slate-800">
+    return (
+        <>
+            <section className="hero">
+                <HeroContours />
                 <Image
-                  src="/images/about-sh.jpg"
-                  alt="Jonathan Reynolds"
-                  fill
-                  className="object-cover"
+                    className="hero-image"
+                    src="/images/home.jpg"
+                    alt="A trekker stands on a ridge above a sea of clouds in the Nepali Himalaya"
+                    fill
+                    priority
+                    sizes="100vw"
                 />
-              </div>
-              <div>
-                <p className="font-bold text-white text-base">Jonathan Reynolds</p>
-                <p className="text-xs text-slate-400 uppercase tracking-wider mt-0.5">Everest Trekker, Oct 2023</p>
-              </div>
-            </div>
-          </ScrollReveal>
+                <div className="hero-scrim" aria-hidden="true" />
+                <div className="wrap hero-content">
+                    <div className="eyebrow">Based in Kathmandu &middot; Nepal treks only</div>
+                    <h1>
+                        Every trail we run <em>starts and ends</em> in Nepal.
+                    </h1>
+                    <p className="lede">
+                        No multi-country packages, no side ventures. Just Everest,
+                        Annapurna, Manaslu, Langtang, Mustang, Kanchenjunga, Dolpo,
+                        Makalu, Dhaulagiri, the far-western Karnali and Ganesh Himal &mdash;
+                        run by guides who trek these valleys year-round.
+                    </p>
+                    <div className="hero-actions">
+                        <Link href="/treks" className="btn btn-primary">
+                            Browse Nepal Treks
+                        </Link>
+                        <Link href="/contact" className="btn btn-ghost">
+                            Talk to a Trek Expert
+                        </Link>
+                    </div>
+                    <div className="hero-meta">
+                        <div>
+                            <span className="num">{treks.length}</span>
+                            <span className="lbl">Nepal Treks</span>
+                        </div>
+                        <div>
+                            <span className="num">{regionCount}</span>
+                            <span className="lbl">Regions Covered</span>
+                        </div>
+                        <div>
+                            <span className="num">12+</span>
+                            <span className="lbl">Years in Nepal</span>
+                        </div>
+                        <div>
+                            <span className="num">1:8</span>
+                            <span className="lbl">Guide Ratio</span>
+                        </div>
+                    </div>
+                </div>
+                <div className="scroll-cue" aria-hidden="true" />
+            </section>
 
-          <ScrollReveal direction="right" delay={0.2} className="lg:col-span-5">
-            <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-[2rem] p-8 md:p-10 space-y-6">
-              <div className="flex gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 * i, duration: 0.3 }}
-                  >
-                    <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
-                  </motion.div>
-                ))}
-              </div>
-              <p className="text-slate-300 leading-relaxed text-base font-medium">
-                NT isn&apos;t a company, it&apos;s a family. They handled all logistics, from high-altitude medicine to helicopter evacuation plans, with pure expertise.
-              </p>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
+            {/* 1 · POPULAR TREKS CAROUSEL */}
+            <section className="trek-carousel-section">
+                <div className="wrap reveal">
+                    <div className="sec-head">
+                        <div className="sec-eyebrow">Popular Treks</div>
+                        <h2>The routes everyone asks for first.</h2>
+                        <p>
+                            Everest, Annapurna and the classics &mdash; the departures
+                            that fill up fastest every season.
+                        </p>
+                    </div>
+                    <div className="trek-carousel">
+                        {popular.map((t) => (
+                            <TrekCard key={t.slug} trek={t} />
+                        ))}
+                    </div>
+                    <div className="sec-more">
+                        <Link href="/treks" className="sec-link">
+                            View all Nepal treks &rarr;
+                        </Link>
+                    </div>
+                </div>
+            </section>
 
-      {/* Newsletter */}
-      <section className="py-24 px-4 max-w-7xl mx-auto">
-        <ScrollReveal>
-          <div className="relative rounded-[2.5rem] overflow-hidden bg-slate-50 border border-slate-100 p-8 sm:p-16 text-center">
-            <div className="relative z-10 max-w-2xl mx-auto space-y-6">
-              <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
-                Join the Ascent
-              </h3>
-              <p className="text-slate-500 leading-relaxed max-w-lg mx-auto">
-                Get updates on seasonal openings, permits, weather updates, and gear checklists.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto pt-4">
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  className="flex-1 px-6 py-4 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-400 placeholder:text-slate-400 shadow-sm transition-all"
-                />
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="px-8 py-4 text-sm font-bold text-white bg-[#0f294a] rounded-xl hover:bg-[#163c6b] transition-colors shadow-md"
-                >
-                  Subscribe
-                </motion.button>
-              </div>
-            </div>
-          </div>
-        </ScrollReveal>
-      </section>
-    </div>
-  );
+            {/* 2 · PREMIUM TRIPS */}
+            <section className="premium-section">
+                <div className="wrap reveal">
+                    <div className="sec-head">
+                        <div className="sec-eyebrow">Premium Trips</div>
+                        <h2>Remote, restricted and expedition-grade.</h2>
+                        <p>
+                            For trekkers who want the Himalaya beyond the classics
+                            &mdash; restricted-area routes with special permits arranged
+                            in-house before you land.
+                        </p>
+                    </div>
+                    <div className="premium-grid">
+                        {premium.map((t) => (
+                            <Link
+                                key={t.slug}
+                                href={`/treks/${t.slug}`}
+                                className="premium-card"
+                            >
+                                <div className="premium-art">
+                                    <img
+                                        className="premium-art-img"
+                                        src={t.image}
+                                        alt={t.name}
+                                        loading="lazy"
+                                    />
+                                    <span className="premium-tag">
+                                        {t.regionLabel.split(",")[0]}
+                                    </span>
+                                </div>
+                                <div className="premium-body">
+                                    <h3>{t.name}</h3>
+                                    <div className="premium-meta">
+                                        <span>{t.days} days</span>
+                                        <span>{t.altitude.split("/")[0].trim()}</span>
+                                        <span>{t.grade}</span>
+                                    </div>
+                                    <span className="premium-link">
+                                        View Expedition &rarr;
+                                    </span>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* 3 · DESTINATION CARDS */}
+            <section className="dest-section">
+                <div className="wrap reveal">
+                    <div className="sec-head">
+                        <div className="sec-eyebrow">Destinations</div>
+                        <h2>Pick a region, we know it trail by trail.</h2>
+                        <p>
+                            Each of Nepal&rsquo;s trekking regions has its own character
+                            &mdash; from Sherpa villages to wind-carved Tibetan plateaus.
+                        </p>
+                    </div>
+                    <div className="dest-grid">
+                        {DESTINATIONS.map((d) => {
+                            const count = treks.filter(
+                                (t) => t.region === d.value
+                            ).length;
+                            return (
+                                <Link
+                                    key={d.value}
+                                    href={`/treks?region=${d.value}`}
+                                    className="dest-card"
+                                >
+                                    <div className="dest-count">
+                                        {count} {count === 1 ? "trek" : "treks"}
+                                    </div>
+                                    <h3>{d.name}</h3>
+                                    <p className="dest-tag">{d.tag}</p>
+                                    <p className="dest-desc">{d.desc}</p>
+                                    <span className="dest-link">
+                                        Explore {d.name} &rarr;
+                                    </span>
+                                </Link>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+
+            {/* 4 · WHY CHOOSE US */}
+            <section className="choose-section">
+                <div className="wrap reveal">
+                    <div className="sec-head">
+                        <div className="sec-eyebrow">Why Choose Us</div>
+                        <h2>Trek with the people who live under the peaks.</h2>
+                        <p>
+                            Six reasons Nepal&rsquo;s own mountains are all we do
+                            &mdash; and why that matters once you&rsquo;re on the trail.
+                        </p>
+                    </div>
+                    <div className="why-nepal-grid">
+                        {WHY.map((w) => (
+                            <div key={w.n} className="why-nepal-card">
+                                <div className="why-nepal-num">{w.n}</div>
+                                <h3>{w.t}</h3>
+                                <p>{w.d}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* 4.5 · HOW BOOKING WORKS */}
+            <section className="steps-section">
+                <div className="wrap reveal">
+                    <div className="sec-head">
+                        <div className="sec-eyebrow">How It Works</div>
+                        <h2>From first email to first step on the trail.</h2>
+                        <p>
+                            Booking with us is a short, human process — no call centres,
+                            no fine print. Four steps from enquiry to trek.
+                        </p>
+                    </div>
+                    <div className="steps-grid">
+                        {STEPS.map((s) => (
+                            <div key={s.n} className="step-card">
+                                <span className="step-num">{s.n}</span>
+                                <h3>{s.t}</h3>
+                                <p>{s.d}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* 5 · STATISTICS */}
+            <section className="stats-section">
+                <div className="wrap reveal">
+                    <div className="sec-head">
+                        <div className="sec-eyebrow">The Numbers</div>
+                        <h2>Guiding Nepal since 2013.</h2>
+                        <p>
+                            What fifteen seasons of walking these valleys has added
+                            up to.
+                        </p>
+                    </div>
+                    <div className="milestones">
+                        <div className="milestone">
+                            <div className="num">9,400+</div>
+                            <div className="lbl">Trekkers guided across Nepal</div>
+                        </div>
+                        <div className="milestone">
+                            <div className="num">97.8%</div>
+                            <div className="lbl">Departures completed as scheduled</div>
+                        </div>
+                        <div className="milestone">
+                            <div className="num">40+</div>
+                            <div className="lbl">Licensed Nepali guides on staff</div>
+                        </div>
+                        <div className="milestone">
+                            <div className="num">4.8/5</div>
+                            <div className="lbl">Average trekker rating</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 6 · TESTIMONIALS */}
+            <section className="testimonials-section">
+                <div className="wrap reveal">
+                    <div className="sec-head">
+                        <div className="sec-eyebrow">Testimonials</div>
+                        <h2>What trekkers remember most.</h2>
+                        <p>
+                            Real words from recent guests, straight off their
+                            post-trek review forms.
+                        </p>
+                    </div>
+                    <div className="testi-strip">
+                        {TESTIMONIALS.map((t) => (
+                            <div key={t.name} className="testi-card">
+                                <div className="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                                <p>&ldquo;{t.quote}&rdquo;</p>
+                                <div className="testi-who">
+                                    <b>{t.name}</b>
+                                    <span>{t.trek}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* 7 · BLOG SECTION */}
+            <section className="blog-section">
+                <div className="wrap reveal">
+                    <div className="sec-head">
+                        <div className="sec-eyebrow">From the Journal</div>
+                        <h2>Guides&rsquo; notes from the trail.</h2>
+                        <p>
+                            Season updates, packing lists and honest answers to the
+                            questions trekkers ask us most.
+                        </p>
+                    </div>
+                    <div className="blog-grid">
+                        {blogPosts.map((p) => (
+                            <Link key={p.slug} href={p.href} className="blog-card">
+                                <div className="blog-cat">{p.category}</div>
+                                <h3>{p.title}</h3>
+                                <p className="blog-excerpt">{p.excerpt}</p>
+                                <div className="blog-meta">
+                                    <span>{p.date}</span>
+                                    <span>{p.read}</span>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                    <div className="sec-more">
+                        <Link href="/blog" className="sec-link">
+                            View all journal posts &rarr;
+                        </Link>
+                    </div>
+                </div>
+            </section>
+        </>
+    );
 }

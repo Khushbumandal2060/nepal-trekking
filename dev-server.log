@@ -1,0 +1,425 @@
+
+> contour-nepal@1.0.0 dev
+> next dev
+
+   ▲ Next.js 15.5.22
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.80:3000
+
+ ✓ Starting...
+ ✓ Ready in 4.8s
+ ○ Compiling / ...
+ ✓ Compiled / in 9.7s (630 modules)
+ GET / 200 in 12355ms
+ ○ Compiling /treks ...
+ ✓ Compiled /treks in 2.5s (624 modules)
+ GET /treks 200 in 4024ms
+ ○ Compiling /book ...
+ ✓ Compiled /book in 932ms (632 modules)
+ GET /book 200 in 1688ms
+ ○ Compiling /blog ...
+ ✓ Compiled /blog in 683ms (637 modules)
+ GET /blog 200 in 1301ms
+ ✓ Compiled in 4.3s (250 modules)
+ ○ Compiling /treks ...
+ ✓ Compiled /treks in 2.2s (384 modules)
+ GET /treks 200 in 4272ms
+ ✓ Compiled / in 229ms (391 modules)
+ GET / 200 in 1137ms
+ GET /treks 200 in 2553ms
+ GET / 200 in 821ms
+ ✓ Compiled in 4.5s (250 modules)
+ ✓ Compiled /treks in 395ms (384 modules)
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\next-devtools\userspace\app\segment-explorer-node.js#SegmentViewNode" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3549033313'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\components\layout-router.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3812866141'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\components\render-from-template-context.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3204927901'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\src\components\Header.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '4044119182'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\components\layout-router.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '1121775566'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\components\render-from-template-context.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '2443798478'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\next-devtools\userspace\app\segment-explorer-node.js#SegmentViewNode" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3210982158'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\next-devtools\userspace\app\segment-explorer-node.js#SegmentViewNode" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3210982158'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\next-devtools\userspace\app\segment-explorer-node.js#SegmentViewNode" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3210982158'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3025866465'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\src\components\ChatBot.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '1865774862'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\src\components\RevealProvider.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '2199137678'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\components\layout-router.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '136207009'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\components\render-from-template-context.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '846803873'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\next-devtools\userspace\app\segment-explorer-node.js#SegmentViewNode" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3549033313'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\lib\framework\boundary-components.js#OutletBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '2442964385'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\components\metadata\async-metadata.js#AsyncMetadataOutlet" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3325864462'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\lib\framework\boundary-components.js#ViewportBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '2108649966'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\lib\framework\boundary-components.js#MetadataBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3994737806'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\components\builtin\global-error.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '1950361825'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\next-devtools\userspace\app\segment-explorer-node.js#SegmentViewNode" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3549033313'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\lib\framework\boundary-components.js#ViewportBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '2108649966'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\lib\framework\boundary-components.js#MetadataBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3994737806'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\components\builtin\global-error.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '1950361825'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\next-devtools\userspace\app\segment-explorer-node.js#SegmentViewNode" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3549033313'
+}
+[0m[7m Server [0m Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\components\builtin\global-error.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>:1:18) {
+  environmentName: 'Server',
+  digest: '1950361825'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\components\builtin\global-error.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>:1:18) {
+  environmentName: 'Server',
+  digest: '1950361825'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\components\builtin\global-error.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>:1:18) {
+  environmentName: 'Server',
+  digest: '1950361825',
+  page: '/treks'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\src\components\TreksSidebar.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3285906005'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3165478901'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3165478901'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3165478901'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3165478901'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3165478901'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3165478901'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '933308570'
+}
+ ⨯ Error: Could not find the module "d:\trekking\trekking-nepal\node_modules\next\dist\client\app-dir\link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3165478901'
+}
+ GET /treks 500 in 84130ms
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 4.1s (592 modules)

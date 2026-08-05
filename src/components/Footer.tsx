@@ -21,7 +21,7 @@ export default function Footer() {
                         <Link href="/about">About Us</Link>
                         <Link href="/contact">Contact</Link>
                     </nav>
-                    <nav aria-label="Regions">
+                    <nav aria-label="Regions" className="footer-regions">
                         <h4>Regions</h4>
                         <Link href="/treks?region=khumbu">Khumbu (Everest)</Link>
                         <Link href="/treks?region=annapurna">Annapurna</Link>
