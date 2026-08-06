@@ -129,6 +129,13 @@ export default function Header() {
                         );
                     })}
                     <Link
+                        href="/register"
+                        className="nav-login"
+                        onClick={() => setOpen(false)}
+                    >
+                        Register
+                    </Link>
+                    <Link
                         href="/login"
                         className="nav-login"
                         onClick={() => setOpen(false)}
