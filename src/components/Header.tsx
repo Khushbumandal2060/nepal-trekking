@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -128,39 +129,41 @@ export default function Header() {
                             </Link>
                         );
                     })}
-                    <Link
-                        href="/register"
-                        className="nav-login"
-                        onClick={() => setOpen(false)}
-                    >
-                        Register
-                    </Link>
-                    <Link
-                        href="/login"
-                        className="nav-login"
-                        onClick={() => setOpen(false)}
-                    >
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            aria-hidden="true"
+                    <div className="nav-actions">
+                        <Link
+                            href="/register"
+                            className="nav-login"
+                            onClick={() => setOpen(false)}
                         >
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                            <circle cx="12" cy="7" r="4" />
-                        </svg>
-                        Login
-                    </Link>
-                    <Link
-                        href="/book"
-                        className="nav-cta"
-                        onClick={() => setOpen(false)}
-                    >
-                        Book a Trek
-                    </Link>
+                            Register
+                        </Link>
+                        <Link
+                            href="/login"
+                            className="nav-login"
+                            onClick={() => setOpen(false)}
+                        >
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                            Login
+                        </Link>
+                        <Link
+                            href="/book"
+                            className="nav-cta"
+                            onClick={() => setOpen(false)}
+                        >
+                            Book a Trek
+                        </Link>
+                    </div>
                 </div>
                 <button
                     type="button"
