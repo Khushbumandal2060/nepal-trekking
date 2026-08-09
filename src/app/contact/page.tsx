@@ -37,7 +37,7 @@ export default function ContactPage() {
 
             <section>
                 <div className="wrap split reveal">
-                    <div>
+                    <div className="contact-card">
                         <div className="sec-eyebrow">Plan My Trek</div>
                         <h2 style={{ fontSize: 28, fontWeight: 500, marginBottom: 30 }}>
                             Send an enquiry
@@ -45,7 +45,7 @@ export default function ContactPage() {
                         <ContactForm />
                     </div>
 
-                    <div>
+                    <div className="contact-card">
                         <div className="sec-eyebrow">Reach Us Directly</div>
                         <h2 style={{ fontSize: 28, fontWeight: 500, marginBottom: 30 }}>
                             Office details
