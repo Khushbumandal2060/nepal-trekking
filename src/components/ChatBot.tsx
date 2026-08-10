@@ -186,17 +186,30 @@ export default function ChatBot() {
         }
     }, [messages, typing, open]);
 
-    function send(text: string) {
+    async function send(text: string) {
         const trimmed = text.trim();
         if (!trimmed) return;
         setMessages((prev) => [...prev, { from: "user", text: trimmed }]);
         setInput("");
         setTyping(true);
-        const reply = getBotReply(trimmed);
-        window.setTimeout(() => {
-            setTyping(false);
-            setMessages((prev) => [...prev, { from: "bot", text: reply }]);
-        }, 650);
+
+        let reply: string;
+        try {
+            const res = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: trimmed }),
+            });
+            const data: { reply?: string } = await res.json();
+            // Use the AI reply when available; otherwise fall back to the
+            // built-in rule-based answers (e.g. no API key configured).
+            reply = data?.reply && data.reply.trim() ? data.reply : getBotReply(trimmed);
+        } catch {
+            reply = getBotReply(trimmed);
+        }
+
+        setTyping(false);
+        setMessages((prev) => [...prev, { from: "bot", text: reply }]);
     }
 
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
