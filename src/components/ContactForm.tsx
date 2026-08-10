@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type FormEvent } from "react";
 import { treks } from "@/data/treks";
+import { addEnquiry, makeId } from "@/admin/admin-store";
 
 const CONTACT_EMAIL = "hello@trekkingnepal.example";
 
@@ -26,8 +27,22 @@ export default function ContactForm() {
 
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        setRef(makeReference());
+        const reference = makeReference();
+        setRef(reference);
         setSent(true);
+
+        // Persist the enquiry so it appears in the /admin panel.
+        addEnquiry({
+            id: makeId("enq"),
+            reference,
+            name,
+            email,
+            trek,
+            dates,
+            message: msg,
+            status: "new",
+            createdAt: new Date().toISOString(),
+        });
     }
 
     function reset() {
