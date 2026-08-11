@@ -1,9 +1,100 @@
-import type { Trek } from "@/lib/types";
+import type { Trek, TrekFaq } from "@/lib/types";
 import { khumbuAnnapurnaTreks } from "./treks-khumbu-annapurna";
 import { moreTreks } from "./treks-more";
 
 // All original trek write-ups. Altitudes/regions are general geographic facts.
-export const treks: Trek[] = [
+
+// ---------------------------------------------------------------------
+// Shared "Good to Know" questions shown on every trek detail page.
+// Each entry carries one or more `topics` used to avoid duplicating a
+// trek's own specific FAQ (e.g. the generic insurance question is skipped
+// on a trek that already asks about insurance).
+// ---------------------------------------------------------------------
+interface GeneralFaq extends TrekFaq {
+    topics: string[];
+}
+
+const generalFaqs: GeneralFaq[] = [
+    {
+        topics: ["fitness"],
+        q: "How fit do I need to be for this trek?",
+        a: "You don't need to be an athlete, but regular cardio and multi-hour hill walking make a big difference. We recommend training for 6–8 weeks beforehand — hiking with a loaded daypack, stairs and treadmill inclines all build the right foundation.",
+    },
+    {
+        topics: ["insurance"],
+        q: "Is travel insurance required for this trek?",
+        a: "Yes. Comprehensive travel insurance covering high-altitude trekking and emergency helicopter evacuation is mandatory on all our treks, and we ask to see proof of cover before departure.",
+    },
+    {
+        topics: ["acclimatization"],
+        q: "How does acclimatization work on the trail?",
+        a: "We follow the 'climb high, sleep low' principle, with built-in acclimatization days and a gradual ascent profile. If anyone shows signs of altitude sickness, we descend immediately and follow our emergency plan.",
+    },
+    {
+        topics: ["gear"],
+        q: "What gear do I need, and can I rent it in Nepal?",
+        a: "The essentials are sturdy hiking boots, a warm down jacket, a sleeping bag rated below freezing and a comfortable daypack. We send a full packing list on booking, and most items can be bought or hired cheaply in Kathmandu or Pokhara.",
+    },
+    {
+        topics: ["food"],
+        q: "What are the teahouses and meals like?",
+        a: "Teahouses offer a bed, blankets and cooked meals — typically dal bhat, noodles, momos and pancakes. They're basic but clean and friendly, with vegetarian options always available. Let us know about any dietary requirements when you book.",
+    },
+    {
+        topics: ["connectivity"],
+        q: "Will I have WiFi, phone signal and power on the trail?",
+        a: "Expect limited connectivity. Most larger villages have WiFi and charging for a small fee, but signal fades quickly with altitude — a good chance to disconnect. Your guide always carries an emergency communication device for safety.",
+    },
+    {
+        topics: ["water"],
+        q: "Is the drinking water safe on the trail?",
+        a: "We recommend only treated or purified water. Teahouses sell boiled water cheaply, and we suggest carrying a reusable bottle with purification tablets or a filter to cut plastic waste. Never drink directly from streams or taps.",
+    },
+    {
+        topics: ["solo"],
+        q: "Can I join as a solo traveller or book a private trek?",
+        a: "Yes to both. Solo trekkers join our scheduled departures with no single supplement, and we also run fully private treks for couples, families or friends. Share your dates and we'll tailor the trip.",
+    },
+];
+
+// Keywords used to match a general FAQ topic against a trek's own questions.
+const topicKeywords: Record<string, string[]> = {
+    fitness: [
+        "experience",
+        "fit",
+        "first",
+        "families",
+        "suitable",
+        "hard",
+        "difficult",
+        "mountaineer",
+        "trekked before",
+        "older",
+        "high-altitude",
+    ],
+    insurance: ["insurance"],
+    acclimatization: ["acclimat", "altitude sickness"],
+    gear: ["gear", "packing", "equipment", "rent", "sleeping bag", "boots"],
+    food: ["teahouse", "food", "meal", "accommodat", "lodge", "camping", "vegetarian"],
+    connectivity: ["wifi", "signal", "phone", "charge", "internet", "sim"],
+    water: ["water", "purif"],
+    solo: ["solo", "alone", "single", "group"],
+};
+
+/** Appends the shared good-to-know questions, skipping any topic the trek already covers. */
+function mergeFaqs(specific: TrekFaq[], general: GeneralFaq[]): TrekFaq[] {
+    const specificText = specific.map((f) => f.q.toLowerCase());
+    const covered = (topic: string) =>
+        (topicKeywords[topic] ?? []).some((kw) =>
+            specificText.some((q) => q.includes(kw))
+        );
+    const extra = general
+        .filter((g) => !g.topics.some(covered))
+        .map(({ q, a }) => ({ q, a }));
+    return [...specific, ...extra];
+}
+
+const rawTreks: Trek[] = [
     {
         slug: "everest-base-camp",
         image: "/images/everest.jpg",
@@ -12,7 +103,7 @@ export const treks: Trek[] = [
         regionLabel: "Khumbu, Solukhumbu District",
         days: 13,
         grade: "Difficult",
-        altitude: "17,600 ft / 5,364 m",
+        altitude: "18,200 ft / 5,545 m",
         startPoint: "Kathmandu → Lukla (flight)",
         bestMonths: "Mar–May, Sep–Nov",
         groupSize: "4–14",
@@ -89,7 +180,7 @@ export const treks: Trek[] = [
             {
                 t: "Namche to Lukla",
                 d: "The final trekking day, retracing the route back to Lukla for a celebratory last night on the trail.",
-                alt: "8,560 ft",
+                alt: "9,380 ft",
                 hrs: "6–7 hrs",
             },
             {
@@ -504,7 +595,7 @@ export const treks: Trek[] = [
         regionLabel: "Langtang National Park",
         days: 7,
         grade: "Moderate",
-        altitude: "12,600 ft / 3,840 m",
+        altitude: "15,660 ft / 4,773 m",
         startPoint: "Kathmandu → Syabrubesi (drive)",
         bestMonths: "Mar–May, Sep–Dec",
         groupSize: "4–16",
@@ -545,7 +636,7 @@ export const treks: Trek[] = [
             {
                 t: "Acclimatization day, Kyanjin Ri side hike",
                 d: "An optional climb for sweeping views over the Langtang range.",
-                alt: "14,500 ft (peak)",
+                alt: "15,660 ft (peak)",
                 hrs: "4–5 hrs",
             },
             {
@@ -927,6 +1018,13 @@ export const treks: Trek[] = [
     ...khumbuAnnapurnaTreks,
     ...moreTreks,
 ];
+
+// Merge each trek's own FAQs with the shared good-to-know questions so every
+// detail page's "Good to Know" section shows around 8–10 questions.
+export const treks: Trek[] = rawTreks.map((trek) => ({
+    ...trek,
+    faqs: mergeFaqs(trek.faqs, generalFaqs),
+}));
 
 export const trekList = treks.map((trek) => ({ ...trek }));
 
