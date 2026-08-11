@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
 import type { Trek } from "@/lib/types";
+import { addBooking, makeId } from "@/admin/admin-store";
 
 interface BookingFlowProps {
     treks: Trek[];
@@ -67,7 +70,11 @@ export default function BookingFlow({ treks, initialSlug }: BookingFlowProps) {
     const [step, setStep] = useState<Step>(1);
     const [done, setDone] = useState(false);
     const [ref, setRef] = useState<string | null>(null);
+    const [saveStatus, setSaveStatus] = useState<
+        "idle" | "saving" | "saved" | "error"
+    >("idle");
     const topRef = useRef<HTMLDivElement>(null);
+    const { data: session, status: authStatus } = useSession();
 
     // Step 1 — trek & departure
     const [trekSlug, setTrekSlug] = useState(initialSlug ?? "");
@@ -92,6 +99,16 @@ export default function BookingFlow({ treks, initialSlug }: BookingFlowProps) {
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [step, done]);
+
+    // Prefill the lead-traveller details from the signed-in account so bookings
+    // are linked to the right person without re-typing everything.
+    useEffect(() => {
+        const accountEmail = session?.user?.email ?? "";
+        if (accountEmail) setEmail((cur) => (cur.trim() ? cur : accountEmail));
+        const accountName = session?.user?.name ?? "";
+        if (accountName) setName((cur) => (cur.trim().length < 2 ? accountName : cur));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [session?.user?.email, session?.user?.name]);
 
     function validateStep1(): string[] {
         const e: string[] = [];
@@ -121,7 +138,7 @@ export default function BookingFlow({ treks, initialSlug }: BookingFlowProps) {
         if (!errs.length) setStep((s) => (s + 1) as Step);
     }
 
-    function handleConfirm(e: FormEvent<HTMLFormElement>) {
+    async function handleConfirm(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const errs = validateStep2();
         setErrors(errs);
@@ -129,7 +146,66 @@ export default function BookingFlow({ treks, initialSlug }: BookingFlowProps) {
             setStep(2);
             return;
         }
-        setRef(makeReference());
+        const reference = makeReference();
+        setRef(reference);
+        setSaveStatus("saving");
+
+        if (trek) {
+            // Local copy so the booking still appears in the /admin panel when
+            // it's opened in this same browser (demo/localStorage store).
+            addBooking({
+                id: makeId("bk"),
+                reference,
+                trekSlug: trek.slug,
+                trekName: trek.name,
+                days: trek.days,
+                departure: month,
+                departureType: departType,
+                groupSize,
+                name,
+                email,
+                phone,
+                country,
+                notes,
+                total,
+                status: "new",
+                createdAt: new Date().toISOString(),
+            });
+
+            // Persist to PostgreSQL so the booking shows up in the signed-in
+            // user's account dashboard (/account).
+            let status: "saved" | "error" = "saved";
+            try {
+                const res = await fetch("/api/bookings", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        reference,
+                        trekSlug: trek.slug,
+                        trekName: trek.name,
+                        days: trek.days,
+                        departure: month,
+                        departureType: departType,
+                        groupSize,
+                        name,
+                        email,
+                        phone,
+                        country,
+                        notes,
+                        total,
+                    }),
+                });
+                const data = await res.json();
+                if (!res.ok || !data.ok) {
+                    status = "error";
+                    console.error("[booking] DB save failed:", data?.error);
+                }
+            } catch (err) {
+                status = "error";
+                console.error("[booking] DB save failed:", err);
+            }
+            setSaveStatus(status);
+        }
         setDone(true);
     }
 
@@ -137,6 +213,7 @@ export default function BookingFlow({ treks, initialSlug }: BookingFlowProps) {
         setStep(1);
         setDone(false);
         setRef(null);
+        setSaveStatus("idle");
         setTrekSlug(initialSlug ?? "");
         setMonth("");
         setDepartType("fixed");
@@ -170,6 +247,40 @@ export default function BookingFlow({ treks, initialSlug }: BookingFlowProps) {
             .join("\n");
         return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }, [ref, trek, month, departType, groupSize, total, name, email, phone, country, notes]);
+
+    if (authStatus === "loading") {
+        return (
+            <div className="booking">
+                <div className="booking-card">
+                    <p className="booking-save">Checking your account…</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!session?.user) {
+        return (
+            <div className="booking">
+                <div className="booking-card">
+                    <div className="sec-eyebrow">Members only</div>
+                    <h2>Sign in to book a trek</h2>
+                    <p className="booking-note">
+                        Only registered users can place a booking. Sign in or create a
+                        free account — your bookings will then appear in your dashboard
+                        and be tracked by our team.
+                    </p>
+                    <div className="booking-nav">
+                        <Link className="btn btn-primary" href="/login">
+                            Sign in to book
+                        </Link>
+                        <Link className="btn btn-ghost" href="/register">
+                            Create an account
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     const steps: { n: Step; label: string }[] = [
         { n: 1, label: "Trek & dates" },
@@ -449,6 +560,12 @@ export default function BookingFlow({ treks, initialSlug }: BookingFlowProps) {
                                     sends a secure booking link within 24 hours.
                                 </p>
 
+                                {saveStatus === "saving" && (
+                                    <p className="booking-save">
+                                        Saving your booking to your account…
+                                    </p>
+                                )}
+
                                 <BookingErrors errors={errors} />
 
                                 <div className="booking-nav">
@@ -462,8 +579,14 @@ export default function BookingFlow({ treks, initialSlug }: BookingFlowProps) {
                                     >
                                         Back
                                     </button>
-                                    <button type="submit" className="btn btn-primary">
-                                        Confirm booking
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary"
+                                        disabled={saveStatus === "saving"}
+                                    >
+                                        {saveStatus === "saving"
+                                            ? "Saving booking…"
+                                            : "Confirm booking"}
                                     </button>
                                 </div>
                             </form>
@@ -504,6 +627,19 @@ export default function BookingFlow({ treks, initialSlug }: BookingFlowProps) {
                                 <dd>{formatMoney(total)}</dd>
                             </div>
                         </dl>
+
+                        {saveStatus === "saved" && (
+                            <p className="booking-save ok">
+                                ✓ Saved to your account — track it in your dashboard.
+                            </p>
+                        )}
+                        {saveStatus === "error" && (
+                            <p className="booking-save warn">
+                                ⚠ We couldn&rsquo;t save this booking to the server right
+                                now. Please email your booking to us below so we don&rsquo;t
+                                miss it.
+                            </p>
+                        )}
 
                         <div className="booking-next">
                             <h3>What happens next</h3>
