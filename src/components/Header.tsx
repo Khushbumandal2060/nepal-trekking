@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 import SearchBar from "./SearchBar";
 import { treks } from "@/data/treks";
 
@@ -16,6 +17,7 @@ const NAV_LINKS = [
 
 export default function Header() {
     const pathname = usePathname();
+    const { data: session } = useSession();
     const isHome = pathname === "/";
     // Inner pages start solid; the home hero starts transparent until you scroll.
     const [solid, setSolid] = useState(!isHome);
@@ -130,32 +132,71 @@ export default function Header() {
                         );
                     })}
                     <div className="nav-actions">
-                        <Link
-                            href="/register"
-                            className="nav-login"
-                            onClick={() => setOpen(false)}
-                        >
-                            Register
-                        </Link>
-                        <Link
-                            href="/login"
-                            className="nav-login"
-                            onClick={() => setOpen(false)}
-                        >
-                            <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                aria-hidden="true"
-                            >
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                <circle cx="12" cy="7" r="4" />
-                            </svg>
-                            Login
-                        </Link>
+                        {session?.user ? (
+                            <>
+                                <Link
+                                    href="/account"
+                                    className="nav-user"
+                                    title={session.user.email ?? undefined}
+                                    onClick={() => setOpen(false)}
+                                >
+                                    <span
+                                        className="nav-user-avatar"
+                                        aria-hidden="true"
+                                    >
+                                        {(
+                                            session.user.name ||
+                                            session.user.email ||
+                                            "?"
+                                        )
+                                            .charAt(0)
+                                            .toUpperCase()}
+                                    </span>
+                                    <span className="nav-user-name">
+                                        {session.user.name?.split(" ")[0] ||
+                                            "Account"}
+                                    </span>
+                                </Link>
+                                <button
+                                    type="button"
+                                    className="nav-login"
+                                    onClick={() =>
+                                        signOut({ callbackUrl: "/" })
+                                    }
+                                >
+                                    Sign out
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <Link
+                                    href="/register"
+                                    className="nav-login"
+                                    onClick={() => setOpen(false)}
+                                >
+                                    Register
+                                </Link>
+                                <Link
+                                    href="/login"
+                                    className="nav-login"
+                                    onClick={() => setOpen(false)}
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                    Login
+                                </Link>
+                            </>
+                        )}
                         <Link
                             href="/book"
                             className="nav-cta"
