@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Trek } from "@/lib/types";
 
@@ -73,7 +74,13 @@ export default function TrekCard({ trek, variant = "home" }: TrekCardProps) {
                 )}`}
             >
                 <div className="trek-art">
-                    <img src={trek.image} alt={trek.name} loading="lazy" />
+                    <Image
+                        fill
+                        src={trek.image}
+                        alt={trek.name}
+                        loading="lazy"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                    />
                     <span className="trek-badge trek-badge-pin">
                         {LOCATION_ICON}
                         {startCity(trek.startPoint)}
@@ -100,7 +107,13 @@ export default function TrekCard({ trek, variant = "home" }: TrekCardProps) {
     return (
         <Link href={`/treks/${trek.slug}`} className="trek-card">
             <div className="trek-art">
-                <img src={trek.image} alt={trek.name} loading="lazy" />
+                <Image
+                    fill
+                    src={trek.image}
+                    alt={trek.name}
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                />
                 <span className="trek-badge trek-badge-pin">
                     {LOCATION_ICON}
                     {trek.startPoint}
