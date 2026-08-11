@@ -288,7 +288,7 @@ export const moreTreks: Trek[] = [
         regionLabel: "Langtang, Central Nepal",
         days: 11,
         grade: "Moderate-Difficult",
-        altitude: "14,830 ft / 4,521 m",
+        altitude: "15,660 ft / 4,773 m",
         startPoint: "Kathmandu → Syabrubesi (road)",
         bestMonths: "Mar–May, Sep–Nov",
         groupSize: "4–14",
@@ -329,7 +329,7 @@ export const moreTreks: Trek[] = [
             {
                 t: "Kyanjin Ri sunrise, descend to Lama Hotel",
                 d: "A dawn hike to Kyanjin Ri for a 360° panorama, then a long descent back through the valley.",
-                alt: "15,100 ft (peak)",
+                alt: "15,660 ft (peak)",
                 hrs: "7–8 hrs",
             },
             {
@@ -347,7 +347,7 @@ export const moreTreks: Trek[] = [
             {
                 t: "Sing Gompa to Gosaikunda",
                 d: "A steep alpine ascent past Laurebina Yak Pass to the sacred lakes, freezing cold and unforgettable.",
-                alt: "14,830 ft (lake)",
+                alt: "14,370 ft (lake)",
                 hrs: "6–7 hrs",
             },
             {
@@ -1049,8 +1049,8 @@ export const moreTreks: Trek[] = [
             },
             {
                 t: "Khongma Danda to Mumbuk (via Shipton La)",
-                d: "Cross the Shipton La pass at over 4,200 m, named after the Everest pioneer, then descend to the river.",
-                alt: "14,200 ft (pass)",
+                d: "Cross the Shipton La pass at around 4,100 m, named after the Everest pioneer, then descend to the river.",
+                alt: "13,700 ft (pass)",
                 hrs: "7–8 hrs",
             },
             {
@@ -1312,7 +1312,7 @@ export const moreTreks: Trek[] = [
         regionLabel: "Mugu, Karnali (Far West)",
         days: 8,
         grade: "Easy-Moderate",
-        altitude: "9,800 ft / 2,990 m",
+        altitude: "10,470 ft / 3,190 m",
         startPoint: "Kathmandu → Nepalgunj → Talcha (flight)",
         bestMonths: "Apr–May, Sep–Nov",
         groupSize: "4–12",
@@ -1347,7 +1347,7 @@ export const moreTreks: Trek[] = [
             {
                 t: "Rara Lake to Murma",
                 d: "Leave the lake and climb to the small settlement of Murma on the surrounding pastures.",
-                alt: "10,600 ft",
+                alt: "10,470 ft",
                 hrs: "4–5 hrs",
             },
             {
