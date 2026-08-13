@@ -293,7 +293,7 @@ export const khumbuAnnapurnaTreks: Trek[] = [
         regionLabel: "Khumbu, Solukhumbu District",
         days: 8,
         grade: "Moderate",
-        altitude: "12,690 ft / 3,867 m",
+        altitude: "12,730 ft / 3,880 m",
         startPoint: "Kathmandu → Lukla (flight)",
         bestMonths: "Mar–May, Sep–Dec",
         groupSize: "4–14",
@@ -322,7 +322,7 @@ export const khumbuAnnapurnaTreks: Trek[] = [
             {
                 t: "Acclimatization day in Namche",
                 d: "A morning hike to the Everest View Hotel for the first full Everest panorama, returning through Khumjung village.",
-                alt: "12,700 ft (viewpoint)",
+                alt: "12,730 ft (viewpoint)",
                 hrs: "4–5 hrs",
             },
             {
@@ -703,7 +703,7 @@ export const khumbuAnnapurnaTreks: Trek[] = [
         regionLabel: "Annapurna, Western Nepal",
         days: 9,
         grade: "Moderate-Difficult",
-        altitude: "12,139 ft / 3,700 m",
+        altitude: "13,550 ft / 4,130 m",
         startPoint: "Pokhara → Nayapul (road)",
         bestMonths: "Mar–May, Sep–Nov",
         groupSize: "4–12",
