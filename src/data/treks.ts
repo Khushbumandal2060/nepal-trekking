@@ -228,6 +228,43 @@ const rawTreks: Trek[] = [
                 a: "Yes. Your policy must cover trekking above 5,000m and include emergency helicopter evacuation. We ask for proof before departure.",
             },
         ],
+        endingPoint: "Kathmandu",
+        bestSeason: "Spring (Mar–May) & Autumn (Sep–Nov)",
+        howToReach: [
+            "Fly Kathmandu → Lukla (about 35 minutes) — the standard access into the Khumbu and included in the trek package.",
+            "Return flight Lukla → Kathmandu at the end, with a buffer day in the itinerary to absorb weather delays.",
+        ],
+        accommodation: [
+            "Teahouse lodges throughout the trek — a private room where available, shared bathrooms at the higher villages.",
+            "Rooms and hot showers are arranged by your guide ahead of each night's stop.",
+        ],
+        food: [
+            "All meals on the trail — breakfast, lunch and dinner — are included every trekking day.",
+            "Typical teahouse fare: dal bhat, noodles, soups and local mountain dishes.",
+        ],
+        permits: [
+            "Sagarmatha National Park entry permit",
+            "Khumbu Pasang Lhamu Rural Municipality entry fee (TIMS)",
+        ],
+        acclimatization: [
+            {
+                day: 3,
+                title: "Namche Bazaar acclimatization day",
+                note: "A short hike toward the Everest View Hotel — 'climb high, sleep low' — helps your body adjust before going higher.",
+            },
+            {
+                day: 6,
+                title: "Dingboche acclimatization day",
+                note: "A side hike up Nangkartshang for panoramic views, then back down to sleep at the same altitude.",
+            },
+        ],
+        pricing: [
+            {
+                label: "From price, per person",
+                price: "$1,450",
+                note: "Final cost depends on group size, season and the services you choose — confirmed in writing at enquiry.",
+            },
+        ],
     },
     {
         slug: "annapurna-base-camp",
