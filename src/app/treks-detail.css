@@ -19,8 +19,8 @@
     justify-content: flex-end;
     background: #04060c;
     color: var(--mist);
-    min-height: 600px;
-    aspect-ratio: 4 / 5;
+    min-height: 460px;
+    aspect-ratio: 5 / 4;
 }
 
 /* Cinematic scrim — dark top (breadcrumb legibility) and bottom (title) */
@@ -76,7 +76,7 @@
     position: relative;
     z-index: 10;
     width: 100%;
-    padding: calc(var(--header-h) + 44px) 0 clamp(40px, 6vw, 76px);
+    padding: calc(var(--header-h) + 28px) 0 clamp(32px, 4vw, 52px);
 }
 
 .trek-hero-crumbs {
@@ -89,7 +89,7 @@
     letter-spacing: 0.5px;
     text-transform: uppercase;
     color: rgba(244, 239, 229, 0.72);
-    margin-bottom: 22px;
+    margin-bottom: 16px;
 }
 
 .trek-hero-crumbs a {
@@ -124,7 +124,7 @@
     padding: 7px 15px;
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
-    margin-bottom: 18px;
+    margin-bottom: 14px;
 }
 
 .trek-hero-tag::before {
@@ -137,8 +137,8 @@
 }
 
 .trek-hero h1 {
-    font-size: clamp(38px, 5.5vw, 74px);
-    line-height: 1.02;
+    font-size: clamp(34px, 4.6vw, 60px);
+    line-height: 1.05;
     letter-spacing: -0.02em;
     max-width: 900px;
     color: #fff;
@@ -146,10 +146,10 @@
 }
 
 .trek-hero .lede {
-    margin-top: 18px;
-    max-width: 640px;
-    font-size: 16.5px;
-    line-height: 1.62;
+    margin-top: 14px;
+    max-width: 560px;
+    font-size: 15.5px;
+    line-height: 1.6;
     color: var(--stone);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
@@ -159,7 +159,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 14px;
-    margin-top: 28px;
+    margin-top: 20px;
 }
 
 .trek-hero-play {
@@ -236,14 +236,14 @@
     overflow: hidden;
     -webkit-backdrop-filter: blur(16px);
     backdrop-filter: blur(16px);
-    box-shadow: 0 24px 54px -18px rgba(0, 0, 0, 0.55);
+    box-shadow: 0 20px 44px -16px rgba(0, 0, 0, 0.55);
     margin: 0 auto;
-    margin-bottom: calc(clamp(28px, 3vw, 44px) * -1);
+    margin-bottom: calc(clamp(20px, 2vw, 30px) * -1);
 }
 
 .trek-hero-stats > div {
     background: rgba(10, 16, 24, 0.58);
-    padding: 16px 20px;
+    padding: 14px 18px;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -294,14 +294,14 @@
 @media (min-width: 640px) {
     .trek-hero {
         aspect-ratio: 16 / 10;
-        min-height: 560px;
+        min-height: 430px;
     }
 }
 
 @media (min-width: 960px) {
     .trek-hero {
-        aspect-ratio: 21 / 10;
-        min-height: 620px;
+        aspect-ratio: 5 / 2;
+        min-height: 470px;
     }
 }
 
@@ -311,7 +311,7 @@
     }
 
     .trek-hero-stats > div {
-        padding: 14px 16px;
+        padding: 12px 14px;
     }
 }
 
