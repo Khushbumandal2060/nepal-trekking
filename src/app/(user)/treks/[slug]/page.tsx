@@ -11,6 +11,8 @@ import PackingList from "@/components/trek/PackingList";
 import BmiCalculator from "@/components/trek/BmiCalculator";
 import StickyCta from "@/components/trek/StickyCta";
 import RelatedTreks from "@/components/trek/RelatedTreks";
+import TrekSubNav from "@/components/trek/TrekSubNav";
+import TrekGallery, { type GalleryImage } from "@/components/trek/TrekGallery";
 import { treks } from "@/data/treks";
 import { GUIDES, TESTIMONIALS } from "@/data/trek-people";
 import { trekVideo } from "@/data/trek-videos";
@@ -151,6 +153,53 @@ function guidesFor(trek: Trek): TrekGuide[] {
     return GUIDES.filter((g) => g.region === "kathmandu");
 }
 
+/** Photos for the gallery section. Curated `trek.gallery` photos (real,
+ *  trek-relevant downloaded images) win; short galleries are topped up with the
+ *  trek's own photo, then other treks from the same region and, when needed, the
+ *  wider Himalaya — so every trek always gets a full gallery. */
+function galleryFor(trek: Trek, allTreks: Trek[]): GalleryImage[] {
+    const seen = new Set<string>();
+    const items: GalleryImage[] = [];
+
+    const push = (src: string, alt: string, caption?: string) => {
+        if (items.length >= 8 || seen.has(src)) return;
+        seen.add(src);
+        items.push({ src, alt, caption });
+    };
+
+    // 1. Curated gallery images first (real trek-relevant photos).
+    (trek.gallery ?? []).forEach((src, i) =>
+        push(
+            src,
+            `${trek.name} — gallery photo ${i + 1}`,
+            i === 0 ? `Scenes from ${trek.regionLabel}` : undefined
+        )
+    );
+
+    // 2. Top up short galleries with the trek's own photo, then region-mates
+    //    (same region = related places), then the wider Himalaya.
+    if (items.length < 8) {
+        const byRegion = (a: Trek, b: Trek) =>
+            Number(b.region === trek.region) - Number(a.region === trek.region);
+
+        push(trek.image, `${trek.name} — Nepal Himalaya`, `Scenes from ${trek.regionLabel}`);
+        allTreks
+            .slice()
+            .sort(byRegion)
+            .forEach((t) =>
+                push(
+                    t.image,
+                    `${t.name} — Nepal Himalaya`,
+                    t.region === trek.region && t.slug !== trek.slug
+                        ? `More from ${trek.regionLabel}`
+                        : undefined
+                )
+            );
+    }
+
+    return items;
+}
+
 /* Site-wide, clearly generic content used when a trek has no curated entry.
    These are standard guidance — never presented as this trek's prices or policy. */
 const DEFAULT_FITNESS = [
@@ -173,6 +222,19 @@ const DEFAULT_CANCELLATION = [
     "The balance is due 30 days before your arrival in Nepal.",
     "Date changes are free up to 30 days before departure.",
     "Full terms are confirmed in writing with your booking confirmation and signed booking form.",
+];
+
+/** Jump-links shown in the sticky sub-navigation. */
+const SUBNAV_LINKS = [
+    { id: "overview", label: "Overview" },
+    { id: "highlights", label: "Highlights" },
+    { id: "gallery", label: "Gallery" },
+    { id: "itinerary", label: "Itinerary" },
+    { id: "route", label: "Route" },
+    { id: "pricing", label: "Pricing" },
+    { id: "packing", label: "Packing" },
+    { id: "reviews", label: "Reviews" },
+    { id: "faq", label: "FAQ" },
 ];
 
 function Stars() {
@@ -215,6 +277,7 @@ export default async function TrekDetailPage({
             : DEFAULT_CANCELLATION;
     const reviews = reviewsFor(t);
     const guides = guidesFor(t);
+    const gallery = galleryFor(t, treks);
 
     return (
         <>
@@ -231,11 +294,11 @@ export default async function TrekDetailPage({
             />
 
             {/* 1 — Hero */}
-            <TrekHero trek={t} />
+            <TrekHero trek={t} video={video} />
 
             {/* Optional video, when the trek or its region has one */}
             {video && (
-                <section className="sec-block">
+                <section className="sec-block" id="video">
                     <div className="wrap reveal" style={{ maxWidth: 980 }}>
                         <SectionHead
                             eyebrow="Watch the Trail"
@@ -256,41 +319,53 @@ export default async function TrekDetailPage({
                 </section>
             )}
 
+            {/* 2 — Sticky in-page navigation */}
+            <TrekSubNav links={SUBNAV_LINKS} />
+
             <div className="td-main">
                 <div className="wrap td-layout">
                     {/* ---- Main content column ---- */}
                     <div className="td-content">
-                        {/* 2 — Overview */}
+                        {/* 3 — Overview */}
                         <section className="sec-block" id="overview">
                             <SectionHead
                                 eyebrow="Trek Overview"
                                 title={`About the ${t.name}`}
                             />
                             <p className="overview-lede">{t.overview}</p>
-                            <div className="stat-chips">
-                                <span className="stat-chip">
-                                    <strong>{t.days}</strong> Days
-                                </span>
-                                <span className="stat-chip">
-                                    <strong>{t.grade}</strong> Difficulty
-                                </span>
-                                <span className="stat-chip">
-                                    <strong>{t.altitude.split("/")[0].trim()}</strong> Max
-                                    altitude
-                                </span>
+                            <div className="stat-strip">
+                                <div className="stat-card">
+                                    <span className="stat-label">Duration</span>
+                                    <strong>{t.days}</strong>
+                                    <span className="stat-unit">Days</span>
+                                </div>
+                                <div className="stat-card">
+                                    <span className="stat-label">Difficulty</span>
+                                    <strong>{t.grade}</strong>
+                                    <span className="stat-unit">Grade</span>
+                                </div>
+                                <div className="stat-card">
+                                    <span className="stat-label">Max altitude</span>
+                                    <strong>{t.altitude.split("/")[0].trim()}</strong>
+                                    <span className="stat-unit">Peak</span>
+                                </div>
                                 {t.bestSeason && (
-                                    <span className="stat-chip">
-                                        <strong>{t.bestSeason}</strong> Best time
-                                    </span>
+                                    <div className="stat-card">
+                                        <span className="stat-label">Best time</span>
+                                        <strong>{t.bestSeason.split(" ")[0]}</strong>
+                                        <span className="stat-unit">Season</span>
+                                    </div>
                                 )}
-                                <span className="stat-chip">
-                                    <strong>{t.price}</strong> From
-                                </span>
+                                <div className="stat-card">
+                                    <span className="stat-label">From</span>
+                                    <strong>{t.price}</strong>
+                                    <span className="stat-unit">Per person</span>
+                                </div>
                             </div>
                         </section>
 
-                        {/* 3 — Highlights */}
-                        <section className="sec-block">
+                        {/* 4 — Highlights */}
+                        <section className="sec-block" id="highlights">
                             <SectionHead
                                 eyebrow="Highlights"
                                 title="Why trekkers choose this route"
@@ -298,8 +373,20 @@ export default async function TrekDetailPage({
                             <HighlightCards highlights={t.highlights} />
                         </section>
 
-                        {/* 4 — Quick Facts */}
-                        <section className="sec-block">
+                        {/* 5 — Photo Gallery */}
+                        {gallery.length >= 3 && (
+                            <section className="sec-block" id="gallery">
+                                <SectionHead
+                                    eyebrow="Photo Gallery"
+                                    title="Scenes from the trail & the Himalaya"
+                                    lead="A glimpse of the places this route passes through — tap any photo to view it full screen."
+                                />
+                                <TrekGallery images={gallery} trekName={t.name} />
+                            </section>
+                        )}
+
+                        {/* 6 — Quick Facts */}
+                        <section className="sec-block" id="facts">
                             <SectionHead
                                 eyebrow="Quick Facts"
                                 title="Everything you need to know at a glance"
@@ -342,7 +429,7 @@ export default async function TrekDetailPage({
                             </div>
                         </section>
 
-                        {/* 5 — Day-by-Day Itinerary */}
+                        {/* 7 — Day-by-Day Itinerary */}
                         <section className="sec-block" id="itinerary">
                             <SectionHead
                                 eyebrow="Day by Day"
@@ -352,9 +439,9 @@ export default async function TrekDetailPage({
                             <ItineraryAccordion days={t.itinerary} />
                         </section>
 
-                        {/* 6 — Acclimatization */}
+                        {/* 8 — Acclimatization */}
                         {acclim.length > 0 && (
-                            <section className="sec-block">
+                            <section className="sec-block" id="acclimatization">
                                 <SectionHead
                                     eyebrow="Acclimatization"
                                     title="Climb high, sleep low"
@@ -377,7 +464,7 @@ export default async function TrekDetailPage({
                             </section>
                         )}
 
-                        {/* 7 — Route Map */}
+                        {/* 9 — Route Map */}
                         <section className="sec-block" id="route">
                             <SectionHead
                                 eyebrow="Route"
@@ -392,7 +479,7 @@ export default async function TrekDetailPage({
                             />
                         </section>
 
-                        {/* 8 — Altitude Profile */}
+                        {/* 10 — Altitude Profile */}
                         <section className="sec-block" id="altitude">
                             <SectionHead
                                 eyebrow="Altitude Profile"
@@ -456,8 +543,8 @@ export default async function TrekDetailPage({
                             )}
                         </section>
 
-                        {/* 9 — How to Reach */}
-                        <section className="sec-block">
+                        {/* 11 — How to Reach */}
+                        <section className="sec-block" id="getting-there">
                             <SectionHead
                                 eyebrow="Getting There"
                                 title="How to reach the trailhead"
@@ -474,8 +561,8 @@ export default async function TrekDetailPage({
                             </ul>
                         </section>
 
-                        {/* 10 — Accommodation */}
-                        <section className="sec-block">
+                        {/* 12 — Accommodation */}
+                        <section className="sec-block" id="accommodation">
                             <SectionHead
                                 eyebrow="Accommodation"
                                 title="Where you stay on the trail"
@@ -487,8 +574,8 @@ export default async function TrekDetailPage({
                             </ul>
                         </section>
 
-                        {/* 11 — Food & Meals */}
-                        <section className="sec-block">
+                        {/* 13 — Food & Meals */}
+                        <section className="sec-block" id="food">
                             <SectionHead eyebrow="Food & Meals" title="Eating well at altitude" />
                             <ul className="info-list">
                                 {food.map((item) => (
@@ -497,7 +584,20 @@ export default async function TrekDetailPage({
                             </ul>
                         </section>
 
-                        {/* 12 — Cost & Pricing */}
+                        {/* 14 — Permits */}
+                        <section className="sec-block" id="permits">
+                            <SectionHead
+                                eyebrow="Permits"
+                                title="Paperwork & permits"
+                            />
+                            <ul className="info-list">
+                                {permits.map((item) => (
+                                    <li key={item}>{item}</li>
+                                ))}
+                            </ul>
+                        </section>
+
+                        {/* 15 — Cost & Pricing */}
                         <section className="sec-block" id="pricing">
                             <SectionHead
                                 eyebrow="Cost & Pricing"
@@ -521,7 +621,7 @@ export default async function TrekDetailPage({
                             </p>
                         </section>
 
-                        {/* 13 & 14 — Inclusions / Exclusions */}
+                        {/* 16 — Inclusions / Exclusions */}
                         <section className="sec-block" id="includes">
                             <SectionHead
                                 eyebrow="What’s Included"
@@ -547,7 +647,7 @@ export default async function TrekDetailPage({
                             </div>
                         </section>
 
-                        {/* 15 — Trek Essentials / Packing List */}
+                        {/* 18 — Trek Essentials / Packing List */}
                         <section className="sec-block" id="packing">
                             <SectionHead
                                 eyebrow="Trek Essentials"
@@ -556,7 +656,7 @@ export default async function TrekDetailPage({
                             <PackingList categories={t.packingList} trekName={t.name} />
                         </section>
 
-                        {/* 16 — Fitness & BMI */}
+                        {/* 19 — Fitness & BMI */}
                         <section className="sec-block" id="fitness">
                             <SectionHead
                                 eyebrow="Fitness & Preparation"
@@ -573,7 +673,7 @@ export default async function TrekDetailPage({
                             </div>
                         </section>
 
-                        {/* 17 — Health & Safety */}
+                        {/* 20 — Health & Safety */}
                         <section className="sec-block" id="safety">
                             <SectionHead eyebrow="Health & Safety" title="Staying safe at altitude" />
                             <ul className="info-list">
@@ -583,7 +683,7 @@ export default async function TrekDetailPage({
                             </ul>
                         </section>
 
-                        {/* 18 — FAQ */}
+                        {/* 21 — FAQ */}
                         <section className="sec-block" id="faq">
                             <SectionHead
                                 eyebrow="Good to Know"
@@ -594,7 +694,7 @@ export default async function TrekDetailPage({
                             </div>
                         </section>
 
-                        {/* 19 — Cancellation / Refund Policy */}
+                        {/* 22 — Cancellation / Refund Policy */}
                         <section className="sec-block" id="cancellation">
                             <SectionHead
                                 eyebrow="Booking & Cancellation"
@@ -608,14 +708,14 @@ export default async function TrekDetailPage({
                         </section>
                     </div>
 
-                    {/* ---- Sticky sidebar (23) ---- */}
+                    {/* ---- Sticky sidebar ---- */}
                     <aside className="td-side">
                         <StickyCta trek={t} />
                     </aside>
                 </div>
             </div>
 
-            {/* 20 — Reviews / Testimonials */}
+            {/* 23 — Reviews / Testimonials */}
             {reviews.length > 0 && (
                 <section className="sec-block sec-block--band" id="reviews">
                     <div className="wrap reveal">
@@ -640,7 +740,7 @@ export default async function TrekDetailPage({
                 </section>
             )}
 
-            {/* 21 — Your Local Guide */}
+            {/* 24 — Your Local Guide */}
             {guides.length > 0 && (
                 <section className="sec-block" id="guide">
                     <div className="wrap reveal">
@@ -675,7 +775,7 @@ export default async function TrekDetailPage({
                 </section>
             )}
 
-            {/* 22 — Related Treks */}
+            {/* 25 — Related Treks */}
             <section className="sec-block sec-block--band" id="related">
                 <div className="wrap reveal">
                     <SectionHead
