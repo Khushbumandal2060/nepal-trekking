@@ -1,16 +1,23 @@
 /* ============================================================
-   ABOUT US — rebuilt page styles
-   Fresh layout built on the design tokens in globals.css
-   (--night, --flare, --mist, --stone, --serif, shadows, etc.)
-   plus the global .wrap / .reveal / .sec-eyebrow / .eyebrow /
-   .btn primitives. No token is redefined here — only used.
+   ABOUT US — redesigned page styles
+   Built entirely on the tokens in globals.css (--night, --flare,
+   --mist, --stone, --serif, shadows, radii, motion) plus the
+   global .wrap / .reveal / .sec-eyebrow / .eyebrow / .btn and
+   .sec-head primitives. No token is redefined here — only used.
 
-   Scroll-reveal strategy:
-   Sections use the global .reveal wrapper. Once RevealProvider
-   adds .is-visible, each child plays `about-rise` with a short
-   delay for the stagger. Fill mode `backwards` hides children
-   only during the delay, then reverts to the normal cascade so
-   :hover effects stay conflict-free.
+   Page rhythm (alternating light / dark):
+     1. Hero (dark photo)         6. Timeline (white)
+     2. Trust ticker (night)      7. Regions (dark gradient)
+     3. Story (mist)              8. Quote (cinematic photo)
+     4. Trail strip (white)       9. Team (white)
+     5. Values (panel)           10. CTA (flare)
+
+   Scroll-reveal strategy matches the rest of the site: sections
+   use the global .reveal wrapper, and once RevealProvider adds
+   .is-visible each child plays `about-rise` with a short stagger
+   delay. Fill mode `backwards` hides children only during the
+   delay, then reverts to the normal cascade so :hover stays
+   conflict-free.
    ============================================================ */
 
 /* ------------------------------------------------------------
@@ -18,7 +25,7 @@
    ------------------------------------------------------------ */
 .hero {
     position: relative;
-    min-height: 92vh;
+    min-height: max(78svh, 600px);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -37,22 +44,40 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 30%;
 }
 
-/* Right-to-left + bottom-heavy scrim so the copy stays readable. */
+/* Left-heavy + bottom-heavy scrim so the copy stays readable. */
 .heroScrim {
     position: absolute;
     inset: 0;
     z-index: 1;
     background:
         linear-gradient(to right,
-            rgba(13, 23, 33, 0.9) 0%,
-            rgba(13, 23, 33, 0.55) 55%,
-            rgba(13, 23, 33, 0.18) 100%),
-        linear-gradient(to top,
             rgba(13, 23, 33, 0.92) 0%,
-            rgba(13, 23, 33, 0.1) 45%,
-            rgba(13, 23, 33, 0.05) 100%);
+            rgba(13, 23, 33, 0.6) 55%,
+            rgba(13, 23, 33, 0.2) 100%),
+        linear-gradient(to top,
+            rgba(13, 23, 33, 0.94) 0%,
+            rgba(13, 23, 33, 0.15) 45%,
+            rgba(13, 23, 33, 0.08) 100%);
+}
+
+/* Vertical "Est. 2013 — Kathmandu" rail down the right edge. */
+.heroRail {
+    position: absolute;
+    right: 22px;
+    top: 50%;
+    z-index: 3;
+    transform: translateY(-50%) rotate(90deg);
+    transform-origin: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(244, 239, 229, 0.5);
+    white-space: nowrap;
+    pointer-events: none;
 }
 
 .heroContent {
@@ -62,8 +87,8 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding-top: clamp(140px, 22vh, 220px);
-    padding-bottom: clamp(48px, 8vh, 72px);
+    padding-top: clamp(96px, 16vh, 160px);
+    padding-bottom: clamp(40px, 6vh, 56px);
 }
 
 .heroContent :global(.eyebrow) {
@@ -77,7 +102,7 @@
     line-height: 1.02;
     letter-spacing: -0.02em;
     color: var(--mist);
-    max-width: 860px;
+    max-width: 820px;
     opacity: 0;
     animation: about-fade-up 0.8s var(--ease) 0.12s both;
 }
@@ -90,7 +115,7 @@
 
 .heroLede {
     margin-top: 26px;
-    max-width: 580px;
+    max-width: 560px;
     font-size: 18px;
     line-height: 1.65;
     color: var(--stone);
@@ -170,22 +195,93 @@
 }
 
 /* ------------------------------------------------------------
-   2 · STORY
+   2 · TRUST TICKER (seamless marquee)
+   ------------------------------------------------------------ */
+.ticker {
+    position: relative;
+    z-index: 2;
+    background: var(--night);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+    padding: 15px 0;
+}
+
+.tickerTrack {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 46s linear infinite;
+    will-change: transform;
+}
+
+.tickerGroup {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.tickerItem {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 26px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--stone);
+    white-space: nowrap;
+}
+
+.tickerItem::before {
+    content: "\2726";
+    color: var(--flare);
+    font-size: 10px;
+    line-height: 1;
+}
+
+@keyframes ticker-scroll {
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* ------------------------------------------------------------
+   3 · STORY
    ------------------------------------------------------------ */
 .story {
     background: var(--mist);
     padding: var(--sec) 0;
+    overflow: hidden;
 }
 
 .storyGrid {
     display: grid;
-    grid-template-columns: 1fr 1.1fr;
-    gap: clamp(32px, 5vw, 72px);
+    grid-template-columns: 1fr 1.05fr;
+    gap: clamp(40px, 6vw, 88px);
     align-items: center;
 }
 
+/* Layered media: ridge artwork behind a framed portrait,
+   plus two overlapping info chips. */
 .storyMedia {
     position: relative;
+}
+
+.storyMedia>svg {
+    position: absolute;
+    top: -34px;
+    right: -26px;
+    z-index: 0;
+    width: 300px;
+    height: auto;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.storyFrame {
+    position: relative;
+    z-index: 1;
     border-radius: var(--r-xl);
     overflow: hidden;
     box-shadow: var(--shadow-xl);
@@ -198,8 +294,9 @@
 
 .storyBadge {
     position: absolute;
-    right: 22px;
-    bottom: 22px;
+    z-index: 2;
+    right: -16px;
+    bottom: 44px;
     background: #fff;
     border-radius: var(--r-lg);
     padding: 12px 20px;
@@ -223,6 +320,25 @@
     font-size: 30px;
     line-height: 1.1;
     color: var(--flare);
+}
+
+.storyChip {
+    position: absolute;
+    z-index: 2;
+    left: -14px;
+    top: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: var(--r-pill);
+    background: var(--night);
+    color: var(--mist);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    box-shadow: var(--shadow-md);
 }
 
 .storyText h2 {
@@ -277,11 +393,75 @@
 }
 
 /* ------------------------------------------------------------
-   SHARED SECTION HEAD
+   4 · TRAIL STRIP (gallery)
+   ------------------------------------------------------------ */
+.trail {
+    background: #fff;
+    padding: var(--sec) 0;
+}
+
+.trailHead {
+    margin-bottom: clamp(30px, 4vw, 44px);
+}
+
+.trailHead :global(.sec-lead) {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.trailGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+}
+
+.trailCard {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 3 / 4;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    background: var(--panel);
+}
+
+.trailImg {
+    object-fit: cover;
+    transition: transform 0.6s var(--ease);
+}
+
+.trailCard::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(to top, rgba(13, 23, 33, 0.62), transparent 45%);
+    pointer-events: none;
+}
+
+.trailCard:hover .trailImg {
+    transform: scale(1.06);
+}
+
+.trailLabel {
+    position: absolute;
+    left: 12px;
+    bottom: 10px;
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* ------------------------------------------------------------
+   SHARED SECTION HEAD (centered)
    ------------------------------------------------------------ */
 .sectionHead {
     text-align: center;
-    max-width: 660px;
+    max-width: 680px;
     margin: 0 auto clamp(32px, 4vw, 48px);
 }
 
@@ -300,15 +480,13 @@
 }
 
 /* ------------------------------------------------------------
-   3 · VALUES
+   5 · VALUES
    ------------------------------------------------------------ */
 .values {
     background: var(--panel);
     padding: var(--sec) 0;
 }
 
-/* Slightly wider than the 1200px default wrap so the four
-   approach cards get a touch more breathing room. */
 .values :global(.wrap) {
     max-width: var(--wrap-wide);
 }
@@ -358,12 +536,17 @@
     transform: scaleX(1);
 }
 
+/* Ghost serif numeral in the top-right corner. */
 .valueNum {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 1px;
+    position: absolute;
+    top: 24px;
+    right: 26px;
+    font-family: var(--font-serif);
+    font-size: 46px;
+    line-height: 1;
+    font-weight: 600;
     color: var(--flare);
-    opacity: 0.75;
+    opacity: 0.12;
 }
 
 .valueIcon {
@@ -372,7 +555,7 @@
     justify-content: center;
     width: 62px;
     height: 62px;
-    margin: 20px 0 18px;
+    margin: 6px 0 18px;
     border-radius: 50%;
     background: var(--flare-soft);
     font-size: 31px;
@@ -385,6 +568,7 @@
     font-size: 22px;
     line-height: 1.3;
     margin-bottom: 9px;
+    padding-right: 34px;
 }
 
 .valueCard p {
@@ -394,7 +578,7 @@
 }
 
 /* ------------------------------------------------------------
-   4 · TIMELINE
+   6 · TIMELINE (alternating "trail" timeline)
    ------------------------------------------------------------ */
 .timeline {
     background: #fff;
@@ -403,56 +587,51 @@
 
 .timelineList {
     position: relative;
-    max-width: 880px;
+    max-width: 920px;
     margin: 0 auto;
+    padding: 10px 0 6px;
 }
 
-/* Vertical gradient line, offset to the year column. */
+/* Dashed trail line running down the centre. */
 .timelineList::before {
     content: "";
     position: absolute;
-    left: 127px;
-    top: 8px;
-    bottom: 8px;
+    left: 50%;
+    top: 12px;
+    bottom: 12px;
     width: 2px;
-    background: linear-gradient(to bottom,
-            transparent,
-            var(--hline) 8%,
-            var(--flare) 50%,
-            var(--hline) 92%,
-            transparent);
+    transform: translateX(-50%);
+    background: repeating-linear-gradient(to bottom,
+            var(--hline) 0 8px,
+            transparent 8px 18px);
 }
 
 .timelineItem {
     position: relative;
-    display: grid;
-    grid-template-columns: 110px 34px 1fr;
-    align-items: start;
-    padding-bottom: 38px;
+    width: 50%;
+    padding: 0 42px 56px;
+}
+
+.timelineItem:nth-child(odd) {
+    left: 0;
+    text-align: right;
+}
+
+.timelineItem:nth-child(even) {
+    left: 50%;
 }
 
 .timelineItem:last-child {
     padding-bottom: 0;
 }
 
-.timelineYear {
-    font-family: var(--font-mono);
-    font-size: 15px;
-    letter-spacing: 0.5px;
-    color: var(--flare);
-    text-align: right;
-    padding-right: 18px;
-    padding-top: 7px;
-    font-weight: 500;
-}
-
 .timelineDot {
-    position: relative;
+    position: absolute;
+    top: 10px;
     z-index: 1;
     display: block;
-    width: 16px;
-    height: 16px;
-    margin: 7px auto 0;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background: #fff;
     border: 4px solid var(--flare);
@@ -460,17 +639,36 @@
     transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
 }
 
+.timelineItem:nth-child(odd) .timelineDot {
+    right: -9px;
+}
+
+.timelineItem:nth-child(even) .timelineDot {
+    left: -9px;
+}
+
 .timelineItem:hover .timelineDot {
-    transform: scale(1.3);
+    transform: scale(1.25);
     box-shadow: 0 0 0 9px rgba(217, 95, 36, 0.2);
 }
 
+.timelineYear {
+    font-family: var(--font-serif);
+    font-size: 46px;
+    line-height: 0.95;
+    color: var(--flare);
+    opacity: 0.9;
+    margin-bottom: 12px;
+}
+
 .timelineCard {
+    display: inline-block;
+    text-align: left;
     background: var(--mist);
     border: 1px solid var(--hline);
     border-radius: var(--r-lg);
     padding: 20px 24px;
-    margin-left: 22px;
+    max-width: 340px;
     transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
 }
 
@@ -493,7 +691,7 @@
 }
 
 /* ------------------------------------------------------------
-   5 · REGIONS
+   7 · REGIONS (dark, clickable region cards)
    ------------------------------------------------------------ */
 .regions {
     position: relative;
@@ -511,98 +709,173 @@
     color: var(--stone);
 }
 
-.regionsCloud {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 14px;
+.regionsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 920px;
+    margin: 0 auto;
 }
 
-.regionPill {
-    display: inline-flex;
-    align-items: center;
-    padding: 11px 24px;
+.regionCard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 20px 22px 24px;
     border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: var(--r-pill);
+    border-radius: var(--r-lg);
     background: rgba(255, 255, 255, 0.05);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    color: var(--stone);
-    font-size: 14.5px;
-    letter-spacing: 0.2px;
-    cursor: default;
+    color: var(--mist);
+    overflow: hidden;
     transition:
         transform 0.3s var(--ease),
         border-color 0.3s var(--ease),
-        color 0.3s var(--ease),
         background 0.3s var(--ease);
 }
 
-.regionPill:hover {
-    transform: translateY(-3px);
-    border-color: rgba(217, 95, 36, 0.45);
-    color: var(--flare-soft);
-    background: rgba(217, 95, 36, 0.1);
+.regionCard::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(120% 90% at 100% 0%, rgba(217, 95, 36, 0.18), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s var(--ease);
+    pointer-events: none;
 }
 
-/* ------------------------------------------------------------
-   6 · TRUST STRIP
-   ------------------------------------------------------------ */
-.trust {
-    background: var(--night);
-    border-top: 1px solid var(--line);
-    padding: 20px 0;
+.regionCard:hover {
+    transform: translateY(-4px);
+    border-color: rgba(217, 95, 36, 0.55);
+    background: rgba(217, 95, 36, 0.12);
 }
 
-.trustInner {
+.regionCard:hover::after {
+    opacity: 1;
+}
+
+.regionName {
+    position: relative;
+    z-index: 1;
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-}
-
-.trustItem {
-    display: inline-flex;
-    align-items: center;
+    align-items: baseline;
+    justify-content: space-between;
     gap: 10px;
-    padding: 8px 24px;
+    font-family: var(--font-serif);
+    font-size: 22px;
+    line-height: 1.1;
+}
+
+.regionCount {
     font-family: var(--font-mono);
-    font-size: 12.5px;
-    letter-spacing: 0.6px;
-    color: var(--stone);
-}
-
-.trustItem::before {
-    content: "\2713";
+    font-size: 11.5px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
     color: var(--flare);
-    font-weight: 600;
-    line-height: 1;
+    background: rgba(217, 95, 36, 0.14);
+    padding: 4px 9px;
+    border-radius: var(--r-pill);
+    white-space: nowrap;
 }
 
-.trustItem+.trustItem {
-    border-left: 1px solid var(--line);
+.regionBlurb {
+    position: relative;
+    z-index: 1;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--stone);
+    padding-right: 26px;
+}
+
+.regionArrow {
+    position: absolute;
+    right: 18px;
+    bottom: 14px;
+    z-index: 1;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--flare);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.regionCard:hover .regionArrow {
+    opacity: 1;
+    transform: none;
 }
 
 /* ------------------------------------------------------------
-   7 · QUOTE
+   8 · QUOTE (cinematic photo band)
    ------------------------------------------------------------ */
 .quote {
-    background: var(--mist);
+    position: relative;
+    overflow: hidden;
     padding: var(--sec) 0;
+    color: var(--mist);
+}
+
+.quoteMedia {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.quoteImg {
+    object-fit: cover;
+}
+
+.quoteScrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(to top,
+            rgba(13, 23, 33, 0.88) 0%,
+            rgba(13, 23, 33, 0.55) 50%,
+            rgba(13, 23, 33, 0.82) 100%);
+}
+
+.quoteWrap {
+    position: relative;
+    z-index: 2;
 }
 
 .quoteBlock {
-    position: relative;
-    max-width: 860px;
+    max-width: 820px;
     margin: 0 auto;
     text-align: center;
-    padding: 0 1.5rem;
+}
+
+.quoteMark {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 6rem;
+    line-height: 0.6;
+    color: var(--flare);
+    opacity: 0.5;
+    margin-bottom: 16px;
+}
+
+.quoteBlock p {
+    font-family: var(--font-serif);
+    font-size: clamp(24px, 3vw, 34px);
+    line-height: 1.45;
+    font-style: italic;
+    color: var(--mist);
+}
+
+.quoteFooter {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
 }
 
 .quoteAvatar {
     width: 56px;
     height: 56px;
-    margin: 0 auto 16px;
+    margin-bottom: 8px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -612,58 +885,31 @@
     font-family: var(--font-serif);
     font-size: 21px;
     box-shadow: var(--shadow-glow);
-}
-
-.quoteMark {
-    display: block;
-    font-family: var(--font-serif);
-    font-size: 5.5rem;
-    line-height: 0.55;
-    color: var(--flare);
-    opacity: 0.35;
-    margin-bottom: 14px;
-}
-
-.quoteBlock p {
-    font-family: var(--font-serif);
-    font-size: clamp(22px, 2.8vw, 28px);
-    line-height: 1.5;
-    font-style: italic;
-    color: var(--ink);
-}
-
-.quoteFooter {
-    margin-top: 28px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
+    border: 2px solid rgba(255, 255, 255, 0.25);
 }
 
 .quoteFooter strong {
     font-size: 16px;
     font-weight: 600;
-    color: var(--ink);
+    color: var(--mist);
 }
 
-.quoteFooter span {
+.quoteFooter>span:last-child {
     font-family: var(--font-mono);
     font-size: 12px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: var(--sub);
+    color: var(--stone);
 }
 
 /* ------------------------------------------------------------
-   8 · TEAM
+   9 · TEAM
    ------------------------------------------------------------ */
 .team {
     background: #fff;
     padding: var(--sec) 0;
 }
 
-/* Slightly wider than the 1200px default wrap so the team
-   cards get a touch more breathing room. */
 .team :global(.wrap) {
     max-width: var(--wrap-wide);
 }
@@ -675,11 +921,14 @@
 }
 
 .teamCard {
-    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: var(--mist);
     border: 1px solid var(--hline);
     border-radius: var(--r-xl);
-    padding: 40px 30px 38px;
-    text-align: center;
+    padding: 30px 24px 32px;
     transition:
         transform 0.35s var(--ease),
         box-shadow 0.35s var(--ease),
@@ -693,19 +942,31 @@
 }
 
 .teamAvatar {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 20px;
+    position: relative;
+    width: 108px;
+    height: 108px;
+    margin-bottom: 20px;
     border-radius: 50%;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-serif);
-    font-size: 32px;
-    color: #fff;
     box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, var(--slate-2), var(--ice));
 }
 
+.teamAvatarImg {
+    object-fit: cover;
+}
+
+.teamAvatarInitials {
+    font-family: var(--font-serif);
+    font-size: 34px;
+    color: #fff;
+}
+
+/* Distinct gradient per guide slot (the fourth is overridden by
+   the join card's position only if present). */
 .teamCard:nth-child(1) .teamAvatar {
     background: linear-gradient(135deg, #d95f24, #f08a5d);
 }
@@ -722,21 +983,28 @@
     background: linear-gradient(135deg, #8a6a3b, #c49a5f);
 }
 
-.teamCard h4 {
+.teamCard h3 {
     font-family: var(--font-serif);
-    font-size: 22px;
-    line-height: 1.3;
+    font-size: 21px;
+    line-height: 1.25;
 }
 
 .teamRole {
     display: block;
-    margin-top: 10px;
+    margin-top: 8px;
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 11.5px;
     letter-spacing: 1px;
     text-transform: uppercase;
     color: var(--flare);
     line-height: 1.5;
+}
+
+.teamBio {
+    margin-top: 14px;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--sub);
 }
 
 /* Join-the-team card, distinct dashed treatment. */
@@ -748,7 +1016,7 @@
     gap: 8px;
     border: 1.5px dashed rgba(217, 95, 36, 0.5);
     border-radius: var(--r-xl);
-    padding: 40px 30px 38px;
+    padding: 30px 24px 32px;
     text-align: center;
     background: var(--flare-soft);
     color: var(--ink);
@@ -771,20 +1039,20 @@
     color: var(--flare);
 }
 
-.teamJoin h4 {
+.teamJoin h3 {
     font-family: var(--font-serif);
-    font-size: 22px;
+    font-size: 21px;
 }
 
 .teamJoin p {
     font-size: 15px;
     line-height: 1.55;
     color: var(--sub);
-    max-width: 240px;
+    max-width: 250px;
 }
 
 /* ------------------------------------------------------------
-   9 · CTA BAND
+   10 · CTA BAND
    ------------------------------------------------------------ */
 .cta {
     position: relative;
@@ -811,26 +1079,45 @@
     color: rgba(255, 255, 255, 0.92);
 }
 
-.cta :global(.btn-ghost) {
+.ctaActions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Inverted buttons on the flare band: solid white primary,
+   outlined white ghost. */
+.cta :global(.btn-primary) {
     background: #fff;
     color: var(--flare-dim);
-    border-color: #fff;
     box-shadow: 0 10px 30px -8px rgba(13, 23, 33, 0.35);
 }
 
-.cta :global(.btn-ghost:hover) {
+.cta :global(.btn-primary:hover) {
     background: #fff;
     transform: translateY(-2px);
     box-shadow: 0 16px 38px -10px rgba(13, 23, 33, 0.45);
 }
 
+.cta :global(.btn-ghost) {
+    border-color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.cta :global(.btn-ghost:hover) {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
 /* ============================================================
    SCROLL-REVEAL STAGGER
    Children are visible by default; once the parent .reveal
-   gains .is-visible (added by RevealProvider) each child plays
-   `about-rise` with a short delay. Fill mode `backwards` only
-   hides children during the delay, then reverts to the normal
-   cascade so :hover works without conflicts.
+   gains .is-visible each child plays `about-rise` with a short
+   delay. Fill mode `backwards` only hides children during the
+   delay, then reverts to the normal cascade so :hover works.
    ============================================================ */
 
 @keyframes about-rise {
@@ -854,6 +1141,27 @@
     animation: about-rise 0.7s var(--ease) 0.15s backwards;
 }
 
+/* ---- Trail strip (5 cards) ---- */
+:global(.reveal.is-visible) .trailCard:nth-child(1) {
+    animation: about-rise 0.55s var(--ease) 0.05s backwards;
+}
+
+:global(.reveal.is-visible) .trailCard:nth-child(2) {
+    animation: about-rise 0.55s var(--ease) 0.11s backwards;
+}
+
+:global(.reveal.is-visible) .trailCard:nth-child(3) {
+    animation: about-rise 0.55s var(--ease) 0.17s backwards;
+}
+
+:global(.reveal.is-visible) .trailCard:nth-child(4) {
+    animation: about-rise 0.55s var(--ease) 0.23s backwards;
+}
+
+:global(.reveal.is-visible) .trailCard:nth-child(5) {
+    animation: about-rise 0.55s var(--ease) 0.29s backwards;
+}
+
 /* ---- Values (4 cards) ---- */
 :global(.reveal.is-visible) .valueCard:nth-child(1) {
     animation: about-rise 0.6s var(--ease) 0.05s backwards;
@@ -873,89 +1181,24 @@
 
 /* ---- Timeline (4 items) ---- */
 :global(.reveal.is-visible) .timelineItem:nth-child(1) {
-    animation: about-rise 0.5s var(--ease) 0.05s backwards;
+    animation: about-rise 0.55s var(--ease) 0.05s backwards;
 }
 
 :global(.reveal.is-visible) .timelineItem:nth-child(2) {
-    animation: about-rise 0.5s var(--ease) 0.15s backwards;
+    animation: about-rise 0.55s var(--ease) 0.15s backwards;
 }
 
 :global(.reveal.is-visible) .timelineItem:nth-child(3) {
-    animation: about-rise 0.5s var(--ease) 0.25s backwards;
+    animation: about-rise 0.55s var(--ease) 0.25s backwards;
 }
 
 :global(.reveal.is-visible) .timelineItem:nth-child(4) {
-    animation: about-rise 0.5s var(--ease) 0.35s backwards;
+    animation: about-rise 0.55s var(--ease) 0.35s backwards;
 }
 
-/* ---- Regions cloud (11 pills) ---- */
-:global(.reveal.is-visible) .regionPill:nth-child(1) {
-    animation: about-rise 0.55s var(--ease) 0.04s backwards;
-}
-
-:global(.reveal.is-visible) .regionPill:nth-child(2) {
-    animation: about-rise 0.55s var(--ease) 0.08s backwards;
-}
-
-:global(.reveal.is-visible) .regionPill:nth-child(3) {
-    animation: about-rise 0.55s var(--ease) 0.12s backwards;
-}
-
-:global(.reveal.is-visible) .regionPill:nth-child(4) {
-    animation: about-rise 0.55s var(--ease) 0.16s backwards;
-}
-
-:global(.reveal.is-visible) .regionPill:nth-child(5) {
-    animation: about-rise 0.55s var(--ease) 0.2s backwards;
-}
-
-:global(.reveal.is-visible) .regionPill:nth-child(6) {
-    animation: about-rise 0.55s var(--ease) 0.24s backwards;
-}
-
-:global(.reveal.is-visible) .regionPill:nth-child(7) {
-    animation: about-rise 0.55s var(--ease) 0.28s backwards;
-}
-
-:global(.reveal.is-visible) .regionPill:nth-child(8) {
-    animation: about-rise 0.55s var(--ease) 0.32s backwards;
-}
-
-:global(.reveal.is-visible) .regionPill:nth-child(9) {
-    animation: about-rise 0.55s var(--ease) 0.36s backwards;
-}
-
-:global(.reveal.is-visible) .regionPill:nth-child(10) {
-    animation: about-rise 0.55s var(--ease) 0.4s backwards;
-}
-
-:global(.reveal.is-visible) .regionPill:nth-child(11) {
-    animation: about-rise 0.55s var(--ease) 0.44s backwards;
-}
-
-/* ---- Trust items (6) ---- */
-:global(.reveal.is-visible) .trustItem:nth-child(1) {
-    animation: about-rise 0.55s var(--ease) 0.04s backwards;
-}
-
-:global(.reveal.is-visible) .trustItem:nth-child(2) {
-    animation: about-rise 0.55s var(--ease) 0.08s backwards;
-}
-
-:global(.reveal.is-visible) .trustItem:nth-child(3) {
-    animation: about-rise 0.55s var(--ease) 0.12s backwards;
-}
-
-:global(.reveal.is-visible) .trustItem:nth-child(4) {
-    animation: about-rise 0.55s var(--ease) 0.16s backwards;
-}
-
-:global(.reveal.is-visible) .trustItem:nth-child(5) {
-    animation: about-rise 0.55s var(--ease) 0.2s backwards;
-}
-
-:global(.reveal.is-visible) .trustItem:nth-child(6) {
-    animation: about-rise 0.55s var(--ease) 0.24s backwards;
+/* ---- Regions (whole grid rises as one) ---- */
+:global(.reveal.is-visible) .regionsGrid {
+    animation: about-rise 0.7s var(--ease) 0.1s backwards;
 }
 
 /* ---- Quote ---- */
@@ -984,6 +1227,19 @@
     animation: about-rise 0.6s var(--ease) 0.33s backwards;
 }
 
+/* ---- CTA (headline, lede, actions) ---- */
+:global(.reveal.is-visible) .cta h2 {
+    animation: about-rise 0.6s var(--ease) 0.05s backwards;
+}
+
+:global(.reveal.is-visible) .cta p {
+    animation: about-rise 0.6s var(--ease) 0.15s backwards;
+}
+
+:global(.reveal.is-visible) .ctaActions {
+    animation: about-rise 0.6s var(--ease) 0.25s backwards;
+}
+
 /* ============================================================
    RESPONSIVE
    ============================================================ */
@@ -993,11 +1249,19 @@
     .teamGrid {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .regionsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 900px) {
     .hero {
-        min-height: 80vh;
+        min-height: max(70svh, 520px);
+    }
+
+    .heroRail {
+        display: none;
     }
 
     .heroStats {
@@ -1014,47 +1278,42 @@
         grid-template-columns: 1fr;
     }
 
+    .trailGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
     /* Timeline becomes a single column with the line on the left. */
-    .timelineList {
-        padding-left: 42px;
-    }
-
     .timelineList::before {
-        left: 7px;
-    }
-
-    .timelineItem {
-        grid-template-columns: 1fr;
-        padding-bottom: 32px;
-    }
-
-    .timelineYear {
-        text-align: left;
-        padding: 0;
-        margin-bottom: 6px;
-    }
-
-    .timelineDot {
-        position: absolute;
-        left: -42px;
-        top: 7px;
-        margin: 0;
+        left: 10px;
         transform: none;
     }
 
-    .timelineItem:hover .timelineDot {
-        transform: scale(1.3);
+    .timelineItem,
+    .timelineItem:nth-child(odd),
+    .timelineItem:nth-child(even) {
+        width: 100%;
+        left: 0;
+        text-align: left;
+        padding: 0 0 34px 44px;
+    }
+
+    .timelineItem:nth-child(odd) .timelineDot,
+    .timelineItem:nth-child(even) .timelineDot {
+        left: -10px;
+        right: auto;
     }
 
     .timelineCard {
-        margin-left: 0;
+        display: block;
+        max-width: none;
     }
 }
 
 @media (max-width: 640px) {
 
     .valuesGrid,
-    .teamGrid {
+    .teamGrid,
+    .regionsGrid {
         grid-template-columns: 1fr;
     }
 
@@ -1062,9 +1321,8 @@
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .trustItem {
-        padding: 6px 14px;
-        font-size: 12px;
+    .trailGrid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .cta h2 {
@@ -1076,6 +1334,9 @@
    REDUCED MOTION
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
+    .tickerTrack {
+        animation: none;
+    }
 
     .heroContent :global(.eyebrow),
     .heroContent h1,
@@ -1088,25 +1349,30 @@
 
     :global(.reveal.is-visible) .storyMedia,
     :global(.reveal.is-visible) .storyText,
+    :global(.reveal.is-visible) .trailCard,
     :global(.reveal.is-visible) .valueCard,
     :global(.reveal.is-visible) .timelineItem,
-    :global(.reveal.is-visible) .regionPill,
-    :global(.reveal.is-visible) .trustItem,
+    :global(.reveal.is-visible) .regionsGrid,
     :global(.reveal.is-visible) .quoteBlock,
     :global(.reveal.is-visible) .teamCard,
-    :global(.reveal.is-visible) .teamJoin {
+    :global(.reveal.is-visible) .teamJoin,
+    :global(.reveal.is-visible) .cta h2,
+    :global(.reveal.is-visible) .cta p,
+    :global(.reveal.is-visible) .ctaActions {
         animation: none;
         opacity: 1;
         transform: none;
     }
 
     .valueCard:hover,
+    .trailCard:hover .trailImg,
     .teamCard:hover,
     .teamJoin:hover,
-    .regionPill:hover,
-    .valueCard:hover::after,
+    .regionCard:hover,
     .timelineItem:hover .timelineDot,
     .timelineItem:hover .timelineCard,
+    .valueCard:hover::after,
+    .cta :global(.btn-primary:hover),
     .cta :global(.btn-ghost:hover) {
         transform: none;
         box-shadow: none;
