@@ -1,5 +1,5 @@
 /**
- * fetch-gallery.mjs
+ * fetch-gallery.ts
  *
  * Downloads real, freely-licensed photos for every trek from the Wikimedia
  * Commons API and saves them under public/images/gallery/. Generates
@@ -7,7 +7,7 @@
  * so the trek detail gallery shows genuine photos of the actual places.
  *
  * Usage:
- *   node scripts/fetch-gallery.mjs
+ *   npm run gallery:fetch
  *
  * Notes:
  *   - Idempotent: skips slugs that already have all `want` images downloaded.
@@ -25,7 +25,7 @@ const OUT_DIR = path.join(ROOT, "public", "images", "gallery");
 const OUT_MAP = path.join(ROOT, "src", "data", "trek-galleries.ts");
 
 /** Slug -> search query on Wikimedia Commons. */
-const TREKS = [
+const TREKS: Array<{ slug: string; query: string }> = [
     { slug: "everest-base-camp", query: "Everest Base Camp Nepal" },
     { slug: "everest-three-passes", query: "Cho La pass Nepal" },
     { slug: "gokyo-lakes", query: "Gokyo Lakes Nepal" },
@@ -69,11 +69,45 @@ const API_URL =
 const SKIP_TITLE = /map|logo|poster|diagram|icon|chart|route|schema|coat|flag|plan|drawing|sketch|template/i;
 const SKIP_MIME = /svg|xml|tiff|tif/;
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const sleep = (ms: number): Promise<void> =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+interface ImageInfo {
+    mime: string;
+    width?: number;
+    thumburl?: string;
+}
+
+interface CommonsPage {
+    index?: number;
+    title: string;
+    imageinfo?: ImageInfo[];
+}
+
+interface CommonsSearchResponse {
+    query?: {
+        pages?: Record<string, CommonsPage>;
+    };
+}
+
+interface SearchResult {
+    title: string;
+    info: ImageInfo | null;
+}
+
+type UsableResult = SearchResult & { info: ImageInfo & { thumburl: string } };
+
+interface RetryOptions {
+    tries?: number;
+    baseDelay?: number;
+}
 
 /** Fetch with retry + backoff; honours Retry-After on 429 (capped at 30s so a
  *  single request can't stall the whole run for minutes) and pauses on 5xx. */
-async function retryFetch(url, { tries = 4, baseDelay = 2000 } = {}) {
+async function retryFetch(
+    url: string,
+    { tries = 4, baseDelay = 2000 }: RetryOptions = {}
+): Promise<Response> {
     for (let attempt = 1; attempt <= tries; attempt++) {
         const res = await fetch(url, {
             headers: { "User-Agent": "ContourNepalGallery/1.0 (site dev script)" },
@@ -93,52 +127,60 @@ async function retryFetch(url, { tries = 4, baseDelay = 2000 } = {}) {
     throw new Error(`HTTP failed after ${tries} tries`);
 }
 
-async function searchCommons(query) {
+function isUsableResult(result: SearchResult): result is UsableResult {
+    if (SKIP_TITLE.test(result.title)) return false;
+    if (!result.info) return false;
+    if (SKIP_MIME.test(result.info.mime)) return false;
+    if ((result.info.width ?? 0) < 1600) return false; // HD source only
+    return Boolean(result.info.thumburl);
+}
+
+async function searchCommons(query: string): Promise<UsableResult[]> {
     const url = API_URL + encodeURIComponent(query);
     const res = await retryFetch(url);
     if (res.status === 404) return [];
-    const data = await res.json();
+    const data = (await res.json()) as CommonsSearchResponse;
     const pages = data?.query?.pages;
     if (!pages) return [];
     return Object.values(pages)
         .filter((p) => p.index != null)
-        .sort((a, b) => a.index - b.index)
+        .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))
         .map((p) => ({ title: p.title, info: p.imageinfo?.[0] ?? null }))
-        .filter(({ title, info }) => {
-            if (SKIP_TITLE.test(title)) return false;
-            if (!info) return false;
-            if (SKIP_MIME.test(info.mime)) return false;
-            if ((info.width ?? 0) < 1600) return false; // HD source only
-            return Boolean(info.thumburl);
-        });
+        .filter(isUsableResult);
 }
 
-function extFor(url) {
+function extFor(url: string): string {
     const pathname = new URL(url).pathname;
     const m = pathname.match(/\.([a-z0-9]+)$/i);
     return m ? m[1].toLowerCase() : "jpg";
 }
 
-async function download(url, dest) {
+async function download(url: string, dest: string): Promise<void> {
     const res = await retryFetch(url, { tries: 3 });
     if (res.status === 404) throw new Error(`404 ${url}`);
     const buf = Buffer.from(await res.arrayBuffer());
     await writeFile(dest, buf);
 }
 
-async function slugFiles(slug) {
+async function slugFiles(slug: string): Promise<string[]> {
     if (!existsSync(OUT_DIR)) return [];
     const names = await readdir(OUT_DIR);
     return names.filter((n) => n.startsWith(`${slug}-`));
 }
 
-async function fetchTrek({ slug, query }) {
+async function fetchTrek({
+    slug,
+    query,
+}: {
+    slug: string;
+    query: string;
+}): Promise<{ slug: string; files: string[] }> {
     const existing = (await slugFiles(slug)).sort();
     const existingCount = existing.length;
     if (existingCount >= WANT) return { slug, files: existing };
 
     const results = await searchCommons(query);
-    const chosen = [];
+    const chosen: string[] = [];
     let i = 0;
     // Number new files after the existing ones so a resumed run never
     // overwrites an already-downloaded file (avoids duplicate entries).
@@ -153,10 +195,12 @@ async function fetchTrek({ slug, query }) {
             await download(info.thumburl, dest);
             chosen.push(path.basename(dest));
             console.log(
-                `  ✓ ${slug} #${existingCount + chosen.length} ${info.thumburl.split("/").pop().slice(0, 60)}`
+                `  ✓ ${slug} #${existingCount + chosen.length} ${info.thumburl.split("/").pop()?.slice(0, 60)}`
             );
         } catch (err) {
-            console.warn(`  ✗ ${slug} failed: ${err.message.slice(0, 80)}`);
+            console.warn(
+                `  ✗ ${slug} failed: ${err instanceof Error ? err.message.slice(0, 80) : String(err)}`
+            );
         }
         i++;
         await sleep(2000); // gentle between downloads (HD files are heavy)
@@ -168,28 +212,31 @@ async function fetchTrek({ slug, query }) {
     return { slug, files: [...existing, ...chosen].slice(0, WANT).sort() };
 }
 
-async function main() {
+async function main(): Promise<void> {
     await mkdir(OUT_DIR, { recursive: true });
     console.log(`Downloading trek photos into ${path.relative(ROOT, OUT_DIR)} …`);
 
-    const result = {};
+    const result: Record<string, string[]> = {};
     for (const trek of TREKS) {
         try {
             const { slug, files } = await fetchTrek(trek);
             result[slug] = files.map((f) => `/images/gallery/${f}`);
         } catch (err) {
-            console.warn(`  ! ${trek.slug} skipped: ${err.message}`);
+            console.warn(
+                `  ! ${trek.slug} skipped: ${err instanceof Error ? err.message : String(err)}`
+            );
             result[trek.slug] = [];
         }
         await sleep(2000);
     }
 
     const lines = Object.entries(result).map(
-        ([slug, files]) => `    ${JSON.stringify(slug)}: [${files.map((f) => JSON.stringify(f)).join(", ")}],`
+        ([slug, files]) =>
+            `    ${JSON.stringify(slug)}: [${files.map((f) => JSON.stringify(f)).join(", ")}],`
     );
 
     const output = `/**
- * Auto-generated by scripts/fetch-gallery.mjs — do not edit by hand.
+ * Auto-generated by scripts/fetch-gallery.ts — do not edit by hand.
  * Real, freely-licensed photos downloaded from Wikimedia Commons for each
  * trek's detail-page gallery. Each array maps to files in public/images/gallery/.
  */
@@ -204,7 +251,7 @@ ${lines.join("\n")}
     console.log(`Total images: ${total}`);
 }
 
-main().catch((err) => {
+main().catch((err: unknown) => {
     console.error(err);
     process.exit(1);
 });
