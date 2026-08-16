@@ -1,6 +1,7 @@
 import type { Trek, TrekFaq } from "@/lib/types";
 import { khumbuAnnapurnaTreks } from "./treks-khumbu-annapurna";
 import { moreTreks } from "./treks-more";
+import { trekGalleries } from "./trek-galleries";
 
 // All original trek write-ups. Altitudes/regions are general geographic facts.
 
@@ -1060,6 +1061,7 @@ const rawTreks: Trek[] = [
 // detail page's "Good to Know" section shows around 8–10 questions.
 export const treks: Trek[] = rawTreks.map((trek) => ({
     ...trek,
+    gallery: trekGalleries[trek.slug]?.length ? trekGalleries[trek.slug] : trek.gallery,
     faqs: mergeFaqs(trek.faqs, generalFaqs),
 }));
 
