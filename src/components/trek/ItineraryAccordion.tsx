@@ -1,9 +1,9 @@
 /**
  * ItineraryAccordion — the interactive "Day-by-Day Itinerary" section.
  *
- * Turns the flat itinerary into an expandable accordion (an upgrade over the
- * old all-open list). The first day is open by default; clicking a day header
- * toggles that day and closes the others. Fully keyboard accessible with the
+ * Renders the flat itinerary as a vertical timeline. Each day is a node on a
+ * connected rail; clicking a day header expands that day and closes the
+ * others. The first day is open by default. Fully keyboard accessible with the
  * same `aria-expanded` / `aria-controls` pattern used elsewhere in the site.
  */
 "use client";
@@ -36,7 +36,7 @@ export default function ItineraryAccordion({ days }: ItineraryAccordionProps) {
     const [openDay, setOpenDay] = useState<number | null>(0);
 
     return (
-        <div className="itin-accordion">
+        <div className="itin-timeline">
             {days.map((day, i) => {
                 const isOpen = openDay === i;
                 const panelId = `itin-panel-${i}`;
@@ -53,12 +53,20 @@ export default function ItineraryAccordion({ days }: ItineraryAccordionProps) {
                                 aria-controls={panelId}
                                 onClick={() => setOpenDay(isOpen ? null : i)}
                             >
+                                <span className="itin-rail-dot" aria-hidden="true" />
                                 <span className="itin-day-num">
                                     Day {String(i + 1).padStart(2, "0")}
                                 </span>
                                 <span className="itin-day-title">{day.t}</span>
                                 <span className="itin-day-meta">
-                                    {day.alt && <span>{day.alt}</span>}
+                                    {day.alt && (
+                                        <span className="itin-day-alt">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                                <path d="m8 3-6 12h5l-2 6 11-14h-5l3-4z" />
+                                            </svg>
+                                            {day.alt}
+                                        </span>
+                                    )}
                                     {day.hrs && (
                                         <span className="itin-day-hrs">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
