@@ -8,7 +8,7 @@
  *     password: demo1234
  *
  * Usage:
- *   node scripts/init-db.mjs
+ *   npm run db:init
  *
  * Connection comes from `DATABASE_URL` or the standard PG env vars
  * (PGHOST / PGPORT / PGUSER / PGPASSWORD / PGDATABASE) in `.env.local`.
@@ -21,7 +21,7 @@ import bcrypt from "bcryptjs";
 const { Pool } = pg;
 
 /* ---- Load .env.local into process.env (tiny parser, no dotenv dep) ---- */
-function loadEnvFile() {
+function loadEnvFile(): void {
     try {
         const raw = readFileSync(resolve(".env.local"), "utf8");
         for (const line of raw.split(/\r?\n/)) {
@@ -46,7 +46,7 @@ function loadEnvFile() {
 
 loadEnvFile();
 
-function connectionString() {
+function connectionString(): string {
     if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
     const host = process.env.PGHOST ?? "localhost";
     const port = process.env.PGPORT ?? "5432";
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS treks (
 );
 `;
 
-async function main() {
+async function main(): Promise<void> {
     const pool = new Pool({ connectionString: connectionString() });
 
     console.log("→ Connecting to the database…");
@@ -130,8 +130,11 @@ async function main() {
     console.log("Done.");
 }
 
-main().catch((err) => {
-    console.error("Initialization failed:", err.message);
+main().catch((err: unknown) => {
+    console.error(
+        "Initialization failed:",
+        err instanceof Error ? err.message : String(err)
+    );
     console.error(
         "Check DATABASE_URL in .env.local (or PGHOST/PGPORT/PGUSER/PGPASSWORD/PGDATABASE)."
     );
