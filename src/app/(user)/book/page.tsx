@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import BookingFlow from "@/components/BookingFlow";
 import JsonLd from "@/components/JsonLd";
 import { listPublicTreks } from "@/lib/treks-db";
-import { breadcrumbJsonLd, buildMetadata } from "@/lib/seo";
+import { breadcrumbJsonLd, buildMetadata, serviceJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
     title: "Book a Trek",
@@ -29,10 +29,13 @@ export default async function BookPage({ searchParams }: BookPageProps) {
     return (
         <>
             <JsonLd
-                data={breadcrumbJsonLd([
-                    { name: "Home", path: "/" },
-                    { name: "Book a Trek", path: "/book" },
-                ])}
+                data={[
+                    serviceJsonLd(),
+                    breadcrumbJsonLd([
+                        { name: "Home", path: "/" },
+                        { name: "Book a Trek", path: "/book" },
+                    ]),
+                ]}
             />
             <section className="page-hero">
                 <div className="wrap">

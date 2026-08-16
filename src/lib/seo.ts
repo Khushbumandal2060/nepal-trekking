@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { BlogPost } from "@/data/blog";
 import type { Trek, TrekFaq } from "@/lib/types";
 
 /* ------------------------------------------------------------------ */
@@ -252,5 +253,87 @@ export function contactPageJsonLd(): JsonLdObject {
         url: absoluteUrl("/contact"),
         about: { "@id": `${SITE_URL}/#organization` },
         inLanguage: "en",
+    };
+}
+
+/** AboutPage — structured profile for the /about route. */
+export function aboutPageJsonLd(): JsonLdObject {
+    return {
+        "@context": "https://schema.org",
+        "@type": "AboutPage",
+        "@id": `${SITE_URL}/about#page`,
+        name: "About Trekking Nepal",
+        url: absoluteUrl("/about"),
+        description: SITE_DESCRIPTION,
+        mainEntity: { "@id": `${SITE_URL}/#organization` },
+        inLanguage: "en",
+    };
+}
+
+/** Service — the guided trekking + booking service offered on /book. */
+export function serviceJsonLd(): JsonLdObject {
+    return {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "@id": `${SITE_URL}/book#service`,
+        serviceType: "Guided trekking tours",
+        name: "Guided Trekking in Nepal",
+        url: absoluteUrl("/book"),
+        description:
+            "Book a place on a guided Nepal trek — Everest, Annapurna, Manaslu, Langtang, Mustang and Kanchenjunga. Availability and pricing confirmed within 24 hours.",
+        provider: { "@id": `${SITE_URL}/#organization` },
+        areaServed: {
+            "@type": "Country",
+            name: "Nepal",
+        },
+        audience: {
+            "@type": "Audience",
+            audienceType: "Trekkers",
+        },
+        availableChannel: {
+            "@type": "ServiceChannel",
+            serviceUrl: absoluteUrl("/book"),
+        },
+        offers: {
+            "@type": "Offer",
+            priceCurrency: "USD",
+            url: absoluteUrl("/book"),
+        },
+    };
+}
+
+/** Best-effort conversion of a display date ("May 28, 2026") to ISO 8601. */
+function toIsoDate(date: string): string {
+    const parsed = new Date(date);
+    return Number.isNaN(parsed.getTime()) ? date : parsed.toISOString();
+}
+
+/** Blog — the /blog Journal, enumerating each post as a BlogPosting. */
+export function blogJsonLd(posts: BlogPost[]): JsonLdObject {
+    return {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "@id": `${SITE_URL}/blog#blog`,
+        url: absoluteUrl("/blog"),
+        name: "The Trekking Nepal Journal",
+        description:
+            "Guides' notes from the trail — season updates, packing lists and honest answers to the questions trekkers ask us most.",
+        publisher: { "@id": `${SITE_URL}/#organization` },
+        inLanguage: "en",
+        blogPost: posts.map((post) => {
+            const iso = toIsoDate(post.date);
+            return {
+                "@type": "BlogPosting",
+                "@id": `${SITE_URL}/blog#${post.slug}`,
+                headline: post.title,
+                description: post.excerpt,
+                url: absoluteUrl(`/blog#${post.slug}`),
+                datePublished: iso,
+                dateModified: iso,
+                mainEntityOfPage: absoluteUrl(`/blog#${post.slug}`),
+                author: { "@id": `${SITE_URL}/#organization` },
+                publisher: { "@id": `${SITE_URL}/#organization` },
+            };
+        }),
     };
 }

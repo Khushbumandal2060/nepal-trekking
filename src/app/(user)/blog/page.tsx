@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import JsonLd from "@/components/JsonLd";
 import { blogPosts } from "@/data/blog";
-import { breadcrumbJsonLd, buildMetadata } from "@/lib/seo";
+import { blogJsonLd, breadcrumbJsonLd, buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
     title: "Journal",
@@ -15,10 +15,13 @@ export default function BlogPage() {
     return (
         <>
             <JsonLd
-                data={breadcrumbJsonLd([
-                    { name: "Home", path: "/" },
-                    { name: "Journal", path: "/blog" },
-                ])}
+                data={[
+                    blogJsonLd(blogPosts),
+                    breadcrumbJsonLd([
+                        { name: "Home", path: "/" },
+                        { name: "Journal", path: "/blog" },
+                    ]),
+                ]}
             />
             <section className="page-hero">
                 <div className="wrap">
