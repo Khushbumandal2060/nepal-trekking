@@ -1,0 +1,666 @@
+/* ============================================================
+   CONTACT PAGE — modern redesign
+   Sections: hero · quick tiles · form + office details · map
+             · what happens next · faq · closing CTA
+   ============================================================ */
+
+/* ---------- 1 · HERO ---------- */
+.hero {
+    position: relative;
+    min-height: max(540px, 74vh);
+    background: var(--night);
+    color: var(--mist);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.heroMedia,
+.heroScrim {
+    position: absolute;
+    inset: 0;
+}
+
+.heroImg {
+    object-fit: cover;
+}
+
+.heroScrim {
+    background:
+        radial-gradient(1000px 520px at 80% -10%, rgba(143, 186, 201, 0.2), transparent 60%),
+        linear-gradient(180deg, rgba(13, 23, 33, 0.52) 0%, rgba(13, 23, 33, 0.82) 100%);
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(217, 95, 36, 0.55), transparent);
+}
+
+.heroRail {
+    position: absolute;
+    top: 50%;
+    right: clamp(16px, 3vw, 40px);
+    transform: translateY(-50%) rotate(180deg);
+    writing-mode: vertical-rl;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(207, 199, 182, 0.55);
+}
+
+.heroContent {
+    position: relative;
+    width: 100%;
+    padding: calc(var(--header-h) + clamp(44px, 8vw, 92px)) 0 clamp(60px, 9vw, 104px);
+    max-width: 780px;
+}
+
+.heroEyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ice);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.heroEyebrow::before {
+    content: "";
+    width: 34px;
+    height: 1px;
+    background: var(--flare);
+}
+
+.heroContent h1 {
+    color: var(--mist);
+    font-size: clamp(38px, 6vw, 66px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+}
+
+.heroLede {
+    margin-top: 22px;
+    max-width: 560px;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--stone);
+}
+
+.heroActions {
+    margin-top: 34px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.heroMeta {
+    margin-top: 42px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--stone);
+}
+
+.heroMeta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.heroMeta span::before {
+    content: "";
+    width: 22px;
+    height: 1px;
+    background: var(--flare);
+}
+
+/* ---------- 2 · QUICK CONTACT TILES ---------- */
+.tiles {
+    padding: clamp(28px, 4vw, 40px) 0;
+    background: var(--mist);
+}
+
+.tilesGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.tile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #fff;
+    border: 1px solid var(--hline);
+    border-radius: var(--r-lg);
+    padding: 24px 22px;
+    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease),
+        border-color 0.3s var(--ease);
+}
+
+a.tile:hover {
+    transform: translateY(-3px);
+    border-color: rgba(217, 95, 36, 0.35);
+    box-shadow: var(--shadow-md);
+}
+
+.tileIcon {
+    font-size: 22px;
+    line-height: 1;
+}
+
+.tileLabel {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--flare);
+}
+
+.tileValue {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.tileSub {
+    font-size: 13px;
+    color: var(--sub);
+}
+
+/* ---------- 3 · FORM + OFFICE DETAILS ---------- */
+.main {
+    padding: clamp(52px, 7vw, 96px) 0;
+    background:
+        radial-gradient(900px 460px at 110% -10%, rgba(143, 186, 201, 0.14), transparent 60%),
+        radial-gradient(800px 420px at -10% 110%, rgba(217, 95, 36, 0.1), transparent 55%),
+        var(--mist);
+}
+
+.split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid var(--hline);
+    border-radius: var(--r-xl);
+    padding: clamp(26px, 4vw, 42px);
+    box-shadow: var(--shadow-md);
+}
+
+.cardHead {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 26px;
+}
+
+.cardHead h2 {
+    font-size: clamp(24px, 3vw, 30px);
+    margin-top: 8px;
+}
+
+.cardTag {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--flare);
+    white-space: nowrap;
+    padding-bottom: 6px;
+}
+
+/* Integrate the ContactForm success state into the card. */
+.card :global(.contact-success) {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    box-shadow: none;
+    text-align: left;
+}
+
+.card :global(.contact-success .contact-success-icon) {
+    margin-left: 0;
+}
+
+.card :global(.contact-success p) {
+    margin-left: 0;
+}
+
+/* Office details (right column) */
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detail {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid var(--hline);
+    border-radius: var(--r-lg);
+    padding: 18px 20px;
+    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease),
+        border-color 0.3s var(--ease);
+}
+
+.detail:hover {
+    transform: translateY(-2px);
+    border-color: rgba(217, 95, 36, 0.3);
+    box-shadow: var(--shadow-sm);
+}
+
+.detailIcon {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--flare-soft);
+    font-size: 18px;
+}
+
+.detailLabel {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sub);
+}
+
+.detailValue {
+    margin-top: 4px;
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.55;
+    word-break: break-word;
+}
+
+.detailValue a {
+    color: var(--flare);
+    font-weight: 600;
+}
+
+.detailValue a:hover {
+    text-decoration: underline;
+}
+
+/* Highlight card under the details column */
+.note {
+    background: var(--night);
+    color: var(--mist);
+    border: 1px solid var(--line);
+    border-radius: var(--r-xl);
+    padding: 26px 26px 28px;
+}
+
+.noteLabel {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ice);
+}
+
+.note p {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--stone);
+}
+
+.noteCta {
+    margin-top: 18px;
+}
+
+/* ---------- 4 · MAP ---------- */
+.map {
+    padding: clamp(52px, 7vw, 96px) 0;
+    background: var(--night);
+    color: var(--mist);
+    overflow: hidden;
+}
+
+.mapGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: clamp(20px, 3vw, 32px);
+    align-items: stretch;
+}
+
+.mapFrame {
+    position: relative;
+    min-height: 460px;
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-xl);
+    background: var(--night-2);
+}
+
+.mapFrame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+
+.mapCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 18px;
+    background: var(--night-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-xl);
+    padding: 32px 30px;
+}
+
+.mapEyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ice);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mapEyebrow::before {
+    content: "";
+    width: 34px;
+    height: 1px;
+    background: var(--flare);
+}
+
+.mapCard h2 {
+    color: var(--mist);
+    font-size: clamp(26px, 3vw, 34px);
+    line-height: 1.15;
+}
+
+.mapRow {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    color: var(--stone);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.mapRowIcon {
+    flex: 0 0 18px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.mapRow b {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--flare);
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.mapBtn {
+    margin-top: 10px;
+}
+
+/* ---------- 5 · WHAT HAPPENS NEXT ---------- */
+.steps {
+    padding: clamp(52px, 7vw, 96px) 0;
+    background: var(--mist);
+}
+
+.stepsHead {
+    max-width: 620px;
+}
+
+.stepsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 40px;
+}
+
+.step {
+    background: #fff;
+    border: 1px solid var(--hline);
+    border-radius: var(--r-lg);
+    padding: 28px 26px;
+    position: relative;
+    overflow: hidden;
+}
+
+.step::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--flare), transparent);
+}
+
+.stepNum {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--flare);
+}
+
+.step h3 {
+    margin: 12px 0 8px;
+    font-size: 20px;
+}
+
+.step p {
+    color: var(--sub);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ---------- 6 · FAQ ---------- */
+.faq {
+    padding: clamp(52px, 7vw, 96px) 0;
+    background: #fff;
+}
+
+.faqGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+}
+
+/* ---------- 7 · CLOSING CTA ----------
+   Warm flare band — deliberately distinct from the cool night footer so the
+   closing action reads as its own moment instead of blending into page chrome. */
+.cta {
+    padding: clamp(60px, 9vw, 110px) 0;
+    background:
+        radial-gradient(1000px 480px at 85% 115%, rgba(255, 255, 255, 0.18), transparent 55%),
+        linear-gradient(135deg, var(--flare) 0%, var(--flare-dim) 100%);
+    color: #fff;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+}
+
+.cta h2 {
+    font-family: var(--font-serif);
+    color: #fff;
+    font-size: clamp(30px, 4.5vw, 48px);
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.cta p {
+    margin: 18px auto 0;
+    max-width: 560px;
+    color: rgba(255, 255, 255, 0.92);
+    line-height: 1.65;
+}
+
+.ctaActions {
+    margin-top: 32px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* Inverted buttons on the flare band: solid white primary, outlined white ghost. */
+.cta :global(.btn-primary) {
+    background: #fff;
+    color: var(--flare-dim);
+    box-shadow: 0 10px 30px -8px rgba(13, 23, 33, 0.35);
+}
+
+.cta :global(.btn-primary:hover) {
+    background: #fff;
+    color: var(--flare-dim);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 38px -10px rgba(13, 23, 33, 0.45);
+}
+
+.cta :global(.btn-ghost) {
+    border-color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.cta :global(.btn-ghost:hover) {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* WhatsApp-branded actions — green button for the closing CTA and a
+   matching green-outline ghost for the hero. */
+.whatsappBtn,
+.whatsappGhost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.whatsappIcon {
+    width: 18px;
+    height: 18px;
+    flex: none;
+}
+
+.whatsappBtn {
+    background: #25d366;
+    border: 1px solid #25d366;
+    color: #fff;
+    box-shadow: 0 10px 30px -8px rgba(37, 211, 102, 0.5);
+}
+
+.whatsappBtn:hover {
+    background: #1ebe5b;
+    border-color: #1ebe5b;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 16px 38px -10px rgba(37, 211, 102, 0.6);
+}
+
+.whatsappGhost {
+    border-color: rgba(37, 211, 102, 0.55);
+    color: #1ebe5b;
+}
+
+.whatsappGhost:hover {
+    border-color: #25d366;
+    background: rgba(37, 211, 102, 0.08);
+    color: #25d366;
+    transform: translateY(-2px);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 960px) {
+    .heroRail {
+        display: none;
+    }
+
+    .tilesGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .split {
+        grid-template-columns: 1fr;
+    }
+
+    .mapGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .mapFrame {
+        min-height: 380px;
+    }
+
+    .stepsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .faqGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .tilesGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .cardHead {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .mapCard {
+        padding: 26px 22px;
+    }
+}
