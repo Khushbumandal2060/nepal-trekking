@@ -30,6 +30,33 @@ const HIGHLIGHT_ICONS = [
         <circle cx="12" cy="12" r="9" />
         <circle cx="12" cy="12" r="3" />
     </svg>,
+    // Compass
+    <svg key="compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="9" />
+        <path d="m15.5 8.5-2 5-5 2 2-5z" />
+    </svg>,
+    // Forest / trail
+    <svg key="forest" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 20h18" />
+        <path d="M7 20c0-3 2-5 5-5s5 2 5 5" />
+        <path d="M9 20v-3" />
+        <path d="M15 20v-3" />
+        <path d="m12 4 4 7-2 1-2-2-2 2-2-1z" />
+    </svg>,
+    // Lake
+    <svg key="lake" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 15c3-2 6 2 9 0s6 2 9 0" />
+        <path d="M3 19c3-2 6 2 9 0s6 2 9 0" />
+        <path d="M6 9c2 1.5 4 1.5 6 0s4-1.5 6 0" />
+        <path d="M6 13c2-1.5 4-1.5 6 0s4 1.5 6 0" />
+    </svg>,
+    // Wildlife
+    <svg key="wildlife" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z" />
+        <path d="M9 10h.01" />
+        <path d="M15 10h.01" />
+        <path d="M9 15a3 3 0 0 0 6 0" />
+    </svg>,
 ];
 
 export default function HighlightCards({ highlights }: { highlights: string[] }) {
