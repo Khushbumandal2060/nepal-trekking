@@ -114,17 +114,28 @@
     color: var(--stone);
 }
 
+.heroMeta a,
 .heroMeta span {
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
+.heroMeta a::before,
 .heroMeta span::before {
     content: "";
     width: 22px;
     height: 1px;
     background: var(--flare);
+}
+
+.heroMeta a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.heroMeta a:hover {
+    color: var(--flare);
 }
 
 /* ---------- 2 · QUICK CONTACT TILES ---------- */

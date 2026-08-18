@@ -206,8 +206,8 @@ export default function ContactPage() {
                         </a>
                     </div>
                     <div className={styles.heroMeta}>
-                        <span>{CONTACT.phoneDisplay}</span>
-                        <span>{CONTACT.email}</span>
+                        <a href={CONTACT.phoneHref}>{CONTACT.phoneDisplay}</a>
+                        <a href={CONTACT.emailHref}>{CONTACT.email}</a>
                         <span>{CONTACT.hours}</span>
                     </div>
                 </div>
